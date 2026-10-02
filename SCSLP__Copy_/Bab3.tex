@@ -1,0 +1,514 @@
+\chapter{Optimisasi Stokastik}
+
+\section{Program Stokastik}
+Dalam konteks optimisasi, terdapat dua jenis model utama, yaitu model deterministik dan model stokastik. Perbedaan mendasar antara keduanya terletak pada cara keduanya menangani ketidakpastian dalam parameter. Model deterministik mengasumsikan bahwa semua parameter diketahui secara pasti, meskipun dalam kenyataannya, nilai-nilai tersebut sering kali hanya berupa estimasi. Model ini memperlakukan parameter sebagai nilai tetap dan pasti, yang memudahkan proses optimisasi namun mungkin tidak sepenuhnya merefleksikan kondisi dunia nyata, di mana ketidakpastian selalu ada. Sebaliknya, model stokastik dirancang untuk mengakomodasi ketidakpastian dengan memodelkan setidaknya satu parameter sebagai variabel acak yang mengikuti distribusi probabilitas tertentu. Pendekatan stokastik memungkinkan analisis yang lebih realistis terhadap kondisi dunia nyata, terutama ketika menghadapi variabel yang tidak sepenuhnya dapat diprediksi.(\mycite{birge2011introduction}).
+
+\begin{definisi} (\mycite{birge2011introduction})
+    Program stokastik adalah model optimisasi di mana setidaknya satu dari parameter merupakan variabel acak.
+\end{definisi}
+
+Dengan mempertimbangkan ketidakpastian dalam model, program stokastik bertujuan untuk menemukan solusi yang optimal tidak hanya untuk satu skenario tunggal, tetapi juga untuk berbagai skenario yang mungkin terjadi. Pendekatan ini sangat relevan dalam konteks sistem \textit{electric bike-sharing}, di mana faktor-faktor seperti permintaan pengguna, ketersediaan sepeda, dan pasokan daya dapat berfluktuasi secara acak. Dengan mengakomodasi variasi ini, program stokastik dapat menghasilkan keputusan yang lebih adaptif dan robust, sehingga sistem dapat beroperasi secara optimal meskipun terdapat perubahan atau ketidakpastian di lapangan.
+
+Selanjutnya, akan diberikan contoh permasalahan sederhana pemodelan program stokastik sebagai berikut.
+
+\begin{contoh}
+    Diberikan masalah optimisasi stokastik sederhana dengan variabel keputusan $\boldsymbol{x}$ dan variabel acak $\boldsymbol{c}$ yang memiliki fungsi objektif:
+    $$
+    \max E[\boldsymbol{c} \cdot \boldsymbol{x}]
+    $$
+    dengan kendala
+    $$
+    \boldsymbol{c} \in \mathbb{R}, \quad 0 \leq \boldsymbol{x} \leq 3, \quad \boldsymbol{x} \in \mathbb{Z}^n, \quad n \in \mathbb{N}.
+    $$
+    
+    Notasi $E[\cdot]$ merepresentasikan nilai harapan, dengan fungsi objektif menggunakan ekspektasi $E[\boldsymbol{c} \cdot \boldsymbol{x}]$ karena $\boldsymbol{c}$ merupakan variabel acak yang mengikuti suatu distribusi probabilitas. Penggunaan ekspektasi ini memungkinkan perhitungan nilai rata-rata dari semua kemungkinan nilai $\boldsymbol{c}$, sehingga akan menghasilkan solusi yang optimal secara rata-rata.
+    
+    Misalkan $\boldsymbol{c}$ memiliki tiga kemungkinan nilai dengan distribusi diskrit,
+    \begin{enumerate}
+        \item $P(c = 2) = 0.2$,
+        \item $P(c = 3) = 0.5$, dan
+        \item $P(c = 4) = 0.3$.
+    \end{enumerate}   
+    Maka nilai ekspektasi dari $\boldsymbol{c}$ dapat dihitung sebagai
+    $$E[\boldsymbol{c}] = 2 \cdot 0.2 + 3 \cdot 0.5 + 4 \cdot 0.3 = 3.1,$$
+    sehingga fungsi objektif dapat ditulis menjadi
+    $$E[\boldsymbol{c} \cdot \boldsymbol{x}] = 3.1x.$$
+    
+    Dengan demikian, meskipun nilai $\boldsymbol{c}$ bersifat tidak pasti, masalah optimisasi dapat diselesaikan dengan menggunakan nilai ekspektasinya untuk mendapatkan solusi yang optimal secara rata-rata.
+\end{contoh}
+
+\subsection{Program Bilangan Bulat Stokastik}
+Program bilangan bulat stokastik mengembangkan konsep program stokastik dengan membatasi beberapa atau semua variabel keputusan menjadi bilangan bulat. Pendekatan ini sangat umum dalam aplikasi praktis, di mana keputusan harus dibuat dalam unit diskrit yang tidak dapat dibagi, seperti jumlah sepeda listrik yang harus disediakan dalam sistem \textit{electric bike-sharing}.
+
+\begin{definisi}(\mycite{birge2011introduction})
+    Program bilangan bulat stokastik adalah jenis program stokastik di mana solusi untuk salah satu atau lebih variabel keputusan harus berupa bilangan bulat.
+\end{definisi}
+
+Program bilangan bulat stokastik sangat relevan dengan \textit{electric bike-sharing} karena banyak keputusan yang harus diambil melibatkan variabel diskrit, seperti jumlah sepeda atau stasiun pengisian daya. Selain itu, ketidakpastian dalam permintaan dan biaya operasional menambah kompleksitas pada masalah optimisasi. Berikut diilustrasikan contoh penerapan program bilangan bulat stokastik.
+
+\begin{contoh}
+    Dimisalkan perusahaan \textit{electric bike-sharing} yang harus memutuskan jumlah sepeda listrik untuk dipesan menghadapi permintaan yang tidak pasti. Misalkan $\boldsymbol{x}$ adalah jumlah sepeda yang dipesan, $\boldsymbol{d}$ adalah permintaan (variabel acak), dan $p$ adalah keuntungan per sepeda yang disewakan. Oleh karena itu, masalah dapat diformulasikan sebagai
+    $$
+    \max E[\min(\boldsymbol{x}, \boldsymbol{d}) \cdot p] - c\boldsymbol{x}
+    $$
+    dengan kendala
+    $$\boldsymbol{x} \geq 0, \quad \boldsymbol{x} \in \mathbb{Z}^n, \quad n \in \mathbb{N}.
+    $$
+    Konstanta $c$ menyatakan biaya tetap pemesanan satu unit sepeda listrik. Model ini mengoptimalkan keuntungan yang diharapkan dengan mempertimbangkan ketidakpastian dalam permintaan dan membuat keputusan tentang jumlah pesanan yang optimal sebagai variabel keputusan bilangan bulat.\\
+    
+    Model semacam ini sangat relevan dengan \textit{electric bike-sharing} di mana perusahaan harus memutuskan berapa banyak sepeda listrik yang harus dibeli di hadapan ketidakpastian mengenai permintaan pengguna dan biaya operasional yang bervariasi.
+\end{contoh}
+
+\subsection{Program Stokastik Dua Tahap}
+
+Program stokastik dua tahap adalah salah satu jenis program stokastik yang memodelkan keputusan yang harus dibuat dalam dua tahap. Pada tahap pertama, keputusan diambil sebelum ketidakpastian (variabel acak) terungkap. Pada tahap kedua, setelah ketidakpastian diketahui, variabel keputusan tambahan dibuat untuk menyesuaikan atau merespons terhadap realisasi ketidakpastian tersebut (\mycite{birge2011introduction}).
+
+\begin{definisi}(\mycite{birge2011introduction})
+    \textbf{Program stokastik dua tahap} atau \textit{two stage stochastic programming} adalah model optimisasi dengan keputusan dapat dibagi dalami 2 fase atau tahap. Tahap pertama mempertimbangkan keputusan yang dibuat sebelum nilai dari variabel acak diketahui, dan tahap kedua memberikan respon setelah nilai parameter stokastik diketahui.
+\end{definisi}
+
+Untuk memperjelas konsep program stokastik dua tahap diilustrasikan contoh bagaimana keputusan dibagi menjadi dua tahap dan bagaimana ketidakpastian mempengaruhi proses pengambilan keputusan.
+
+\begin{contoh}
+    Misalkan sebuah operator \textit{electric bike-sharing} di Yogyakarta memiliki 2 jenis sepeda listrik, reguler dan premium. Setiap malam, operator harus memutuskan berapa jam operasional dari masing-masing jenis sepeda yang harus disiapkan di stasiun utama untuk keesokan harinya. Satu jam tambahan juga akan disediakan untuk fleksibilitas. Jika keesokan hari cuaca cerah (kemungkinan 70\%), akan ada permintaan untuk 3 jam sepeda reguler dan 1 jam sepeda premium. Jika cuaca hujan (kemungkinan 30\%), permintaan akan menjadi 1 jam sepeda reguler dan 3 jam sepeda premium. Operator ingin memaksimalkan ekspektasi total jam sepeda yang digunakan.
+
+    Permasalahan ini adalah contoh program stokastik dua tahap. Pada tahap pertama, operator memutuskan alokasi awal jam operasional sepeda sebelum mengetahui kondisi cuaca. Tahap kedua terjadi keesokan hari ketika cuaca diketahui, dan operator dapat menyesuaikan alokasi jam operasional yang tersisa.
+
+    Variabel keputusan tahap pertama adalah jumlah jam operasional sepeda reguler ($x_1$) dan premium ($x_2$) yang disiapkan. Untuk tahap kedua, $w_1^s$ dan $w_2^s$ adalah jumlah jam operasional sepeda reguler dan premium yang ditambahkan setelah cuaca diketahui, dengan $s = 1$ untuk cerah dan $s = 2$ untuk hujan. Variabel $z_1^s$ dan $z_2^s$ adalah jumlah jam operasional sepeda reguler dan premium yang digunakan pada hari dengan cuaca tipe $s$.
+    
+    Model program linear stokastik dua tahap dapat dinyatakan dalam bentuk
+    
+    $$
+    \max \, 0{,}70 (z_1^1 + z_2^1) + 0{,}30 (z_1^2 + z_2^2)
+    $$
+    
+    dengan kendala
+    
+    $$
+    \begin{aligned}
+    & x_1 + x_2 = 3, \\
+    & x_1 + w_1^1 \geq z_1^1, \\
+    & x_2 + w_2^1 \geq z_2^1, \\
+    & w_1^1 + w_2^1 = 1, \\
+    & z_1^1 \leq 3, \\
+    & z_2^1 \leq 1, \\
+    & x_1 + w_1^2 \geq z_1^2, \\
+    & x_2 + w_2^2 \geq z_2^2, \\
+    & w_1^2 + w_2^2 = 1, \\
+    & z_1^2 \leq 1, \\
+    & z_2^2 \leq 3, \\
+    & \text{semua variabel} \geq 0.
+    \end{aligned}
+    $$
+    
+    Dengan menggunakan \textit{software} optimisasi Lingo 19.0 diperoleh solusi 2 jam operasional untuk sepeda reguler dan 1 jam untuk premium di malam hari. Jika cuaca cerah, operator menambahkan 1 jam operasional untuk sepeda reguler, sehingga jam operasional yang digunakan adalah 3 jam reguler dan 1 jam premium. Jika cuaca hujan, operator menambahkan 1 jam operasional untuk sepeda premium, sehingga jam operasional yang digunakan adalah 2 jam reguler dan 2 jam premium. Strategi ini menghasilkan ekspektasi penggunaan sebesar 3,7 jam per hari.
+    
+    Contoh ini mengilustrasikan bagaimana operator \textit{electric bike-sharing} dapat mengoptimalkan alokasi jam operasional sepeda dengan mempertimbangkan ketidakpastian cuaca dan pola permintaan untuk efisiensi operasional dan kepuasan pengguna.
+    \label{contoh3.1.7}
+\end{contoh}
+
+
+\section{\textit{Fire Hawk Optimizer}}
+Suku asli Australia memanfaatkan api sebagai alat untuk mengendalikan dan menjaga keseimbangan ekosistem lokal, yang telah menjadi bagian dari budaya dan tradisi mereka selama bertahun-tahun. Sering kali, kebakaran yang dimulai dengan sengaja atau secara alami terjadi, seperti karena petir, menyebar karena faktor manusia, dan faktor-faktor lain yang meningkatkan kerentanan lanskap alami dan satwa liar. Selain itu, elang siul, elang hitam, dan elang coklat juga menjadi salah satu penyebab utama penyebaran api di alam liar. Burung-burung ini dikenal sebagai elang api atau \textit{fire hawk} yang selalu mencoba untuk menyebarkan api dengan cara membawa kayu yang terbakar dengan menggunakan paruh ataupun cakar mereka. Aktivitas elang ini dicatat sebagai fenomena yang merusak alam (\mycite{azizi2023fire}).\\
+
+\begin{figure}[H]
+\centering
+\includegraphics{Gambar FHO/img291.jpg}
+\caption{Foto Perilaku Elang Api Terhadap Api (\mycite{azizi2023fire})}
+\label{Foto perilaku elang api terhadap api}
+\end{figure}
+
+Aktivitas elang ini diilustrasikan pada Gambar \ref{Foto perilaku elang api terhadap api}. Sebagai mekanisme untuk mengendalikan dan menangkap mangsa mereka, burung-burung ini mengambil kayu yang terbakar dan menjatuhkannya di tempat yang tidak terbakar untuk memantik api (a). Api yang terpantik ini akan menakuti mangsa seperti tikus, ular, ataupun hewan lain, dan memaksa mereka mundur (b) ke tempat di mana mereka dapat dimangsa dengan mudah oleh burung-burung elang api ini (c).\\
+
+
+\indent 
+Algoritma\textit{ Fire-Hawk Optimizer} meniru perilaku dari elang api yaitu perilaku mereka mengatur dan menyebarkan api untuk menangkap mangsanya. Lebih rincinya cara kerja algoritma tersebut sebagai berikut. Pertama, ditentukan jumlah kandidat solusi $(X)$ sebagai vektor posisi dari \textit{fire hawk} dan mangsa. Lalu, ditentukan juga inisialisasi secara acak nilai awal vektor posisi di ruang pencarian, yaitu didefinisikan
+
+\begin{align}
+    X &= \begin{bmatrix}
+    X_1 \\
+    X_2 \\
+    \vdots \\
+    X_i \\
+    \vdots \\
+    X_N
+    \end{bmatrix} 
+    = \begin{bmatrix}
+    x_1^1 & x_1^2 & \cdots & x_1^a & \cdots & x_1^d \\
+    x_2^1 & x_2^2 & \cdots & x_2^a & \cdots & x_2^d \\
+    \vdots & \vdots & & \vdots & & \vdots \\
+    x_b^1 & x_b^2 & \cdots & x_b^a & \cdots & x_b^d \\
+    \vdots & \vdots & & \vdots & & \vdots \\
+    x_N^1 & x_N^2 & \cdots & x_N^a & \cdots & x_N^d
+    \end{bmatrix},
+\end{align}
+dan
+\begin{align}
+    x_i^j(0) &= x_{i,\text{min}}^j + \text{rand}( x_{i,\text{max}}^j - x_{i,\text{min}}^j ), \quad
+    i = 1, 2, \ldots, N, \text{ dan } j = 1, 2, \ldots, d.
+\end{align}
+
+Notasi $X_i$ merepresentasikan kandidat solusi ke $i$ di ruang pencarian, $d$ merepresentasikan dimensi dari permasalahan, $N$ adalah jumlah total kandidat solusi di ruang pencarian, $x_i^j$ adalah variabel keputusan ke $j$ dari kandidat solusi ke $i$, $x_i^j(0)$ merepresentasikan posisi awal dari kandidat solusi, $x_{i,\text{min}}^j$ dan $x_{i,\text{max}}^j$ adalah batas bawah dan batas atas dari decision variable ke $j$ untuk kandidat solusi ke $i$, dan rand adalah fungsi untuk memilih bilangan acak yang terdistribusi seragam dalam rentang [0,1].\\
+
+Untuk menentukan lokasi \textit{fire hawk} di ruang pencarian, fungsi objektif dievaluasi untuk memilih kandidat solusi dari masalah optimisasi yang dikerjakan. Beberapa kandidat solusi dengan nilai fungsi objektif terbaik direpresentasikan sebagai \textit{fire hawk}, sedangkan kandidat solusi lain dianggap sebagai mangsa. \textit{Fire hawk} yang terpilih dimanfaatkan untuk menyebarkan api di sekitar mangsa di ruang pencarian untuk memudahkan perburuan. Selain itu, solusi global terbaik diasumsikan sebagai api utama yang pertama kali dimanfaatkan oleh \textit{fire hawk} untuk menyebarkan api di ruang pencarian. Skema di atas diilustrasikan pada Gambar \ref{Skema penentuan elang api dan mangsa di ruang pencarian}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Gambar FHO/img306.jpg}
+    \caption{Skema Penentuan Elang Api dan Mangsa di Ruang Pencarian (\mycite{azizi2023fire})}
+    \label{Skema penentuan elang api dan mangsa di ruang pencarian}
+\end{figure}
+
+Secara matematis skema tersebut dapat ditulis sebagai
+
+\begin{align}
+    PR = \begin{bmatrix}
+        PR_1\\
+        PR_2\\
+        \vdots\\
+        PR_k\\
+        \vdots\\
+        PR_m
+    \end{bmatrix},
+\end{align}
+dan
+\begin{align}
+    FH = \begin{bmatrix}
+        FH_1\\
+        FH_2\\
+        \vdots\\
+        FH_l\\
+        \vdots\\
+        FH_n
+    \end{bmatrix}.
+\end{align}
+
+Notasi $PR_k$ adalah mangsa ke-$k$ di ruang pencarian dengan $m$ jumlah keseluruhan mangsa, dan $FH_l$ adalah \textit{fire hawk} ke $l$ dengan $n$ jumlah keseluruhan \textit{fire hawk} di ruang pencarian.\\
+
+Fase berikutnya dari algoritma ini adalah menghitung jumlah jarak antara \textit{fire hawk} dan mangsa, sehingga jarak mangsa terpendek terhadap tiap \textit{fire hawk} dapat ditentukan. Jadi, teritori yang efektif untuk burung-burung ini dapat ditentukan. Dengan kata lain teritori \textit{fire hawk} dengan fungsi objektif terbaik ditentukan dari mangsa-mangsa terdekatnya, teritori \textit{fire hawk} dengan fungsi objektif terbaik kedua ditentukan berdasar mangsa didekatnya yang tidak termasuk dalam teritori \textit{fire hawk} sebelumnya, dan seterusnya. Gambar \ref{Skema perhitungan jarak antara elang api dan mangsa} menunjukkan ilustrasi dari perspektif ini, dengan $D_k^l$ didefinisikan sebagai
+
+\begin{align}
+    D_k^l = \sqrt{(x_2-x_1)^2+(y_2-y_1)^2}, \quad
+    l = 1, 2, \ldots, n, \text{ dan } k = 1, 2, \ldots, m.
+\end{align}
+
+Notasi $D_k^l$ menyatakan jumlah jarak antara \textit{fire hawk} ke-$l$ dan mangsa ke-$k$, $m$ adalah jumlah mangsa di ruang pencarian, $n$ adalah jumlah \textit{fire hawk} di ruang pencarian, dan $(x_1,y_1)$ dan $(x_2,y_2)$ merepresentasikan koordinat dari \textit{fire hawk} di ruang pencarian.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Gambar FHO/img323.jpg}
+    \caption{Skema Perhitungan Jarak Antara Elang Api dan Mangsa (\mycite{azizi2023fire})}
+    \label{Skema perhitungan jarak antara elang api dan mangsa}
+\end{figure}
+
+Setelah melakukan prosedur yang telah dijelaskan di atas untuk mengukur jarak total antara \textit{fire hawk} dan mangsa, teritori burung-burung ini dapat ditentukan berdasarkan mangsa terdekat di sekitarnya. Dengan mengklasifikasikan \textit{fire hawk} dan mangsa, proses pencarian dari algoritma dapat diatur. Perlu diperhatikan bahwa \textit{fire hawk} dengan nilai fungsi objektif yang lebih baik akan memilih mangsa terdekat terbaik dalam ruang pencarian untuk teritori tertentu. Kemudian, \textit{fire hawk} lain mencari mangsa terdekat lainnya di ruang pencarian, yang menunjukkan bahwa \textit{fire hawk} terkuat melakukan perburuan yang lebih baik daripada \textit{fire hawk} lain. Gambar \ref{Skema penentuan teritori elang api di ruang pencarian} menunjukkan skema penentuan teritori \textit{fire hawk} di ruang pencarian.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Gambar FHO/img345.jpg}
+    \caption{Skema Penentuan Teritori Elang Api di Ruang Pencarian (\mycite{azizi2023fire})}
+    \label{Skema penentuan teritori elang api di ruang pencarian}
+\end{figure}
+
+Pada fase berikutnya dari algoritma, \textit{fire hawk} mengumpulkan kayu yang terbakar dari api utama untuk memantik api di area yang dipilih. Pada fase ini, tiap burung membawa kayu yang terbakar lalu menjatuhkannya di teritori tertentu untuk memaksa mangsanya buru-buru melarikan diri. Sedangkan beberapa burung akan menggunakan kayu yang terbakar dari teritori \textit{fire hawk} yang lain sehingga kedua perilaku ini dapat dimanfaatkan untuk memperbarui prosedur dari \textit{loop} pencarian utama FHO, yang ditunjukkan pada persamaan berikut:
+
+\begin{align}
+    FH_l^{\textit{new}}=FH_l+(r_1\times GB-r_2\times FH_{\textit{near}}), l=1,2,\ldots,n.
+\end{align}
+
+Notasi $FH_l^{\textit{new}}$ menyatakan vektor posisi baru dari \textit{fire hawk} ($FH_l$) ke-$l$, $GB$ adalah solusi global terbaik di ruang pencarian yang dianggap sebagai api utama, $FH_{\textit{near}}$ adalah salah satu \textit{fire hawk} lain di ruang pencarian, dan $r_1$ dan $r_2$ adalah angka acak yang terdistribusi seragam dalam rentang $(0,1)$ untuk menentukan pergerakan dari \textit{fire hawk} terhadap api utama dan teritori \textit{fire hawk} lain. Gambar \ref{Skema proses pembaruan posisi elang api di ruang pencarian} menunjukkan skema pembaruan posisi \textit{fire hawk}.\\
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Gambar FHO/img369.jpg}
+    \caption{Skema Proses Pembaruan Posisi Elang Api di Ruang Pencarian (\mycite{azizi2023fire})}
+    \label{Skema proses pembaruan posisi elang api di ruang pencarian}
+\end{figure}
+
+Fase algoritma selanjutnya, pergerakan dari mangsa di dalam teritori dari tiap \textit{fire hawk} dianggap sebagai kunci dari perilaku hewan untuk proses pembaruan posisi. Ketika kayu yang terbakar dijatuhkan oleh seekor \textit{fire hawk}, mangsa memutuskan untuk bersembunyi, melarikan diri, ataupun berlari ke arah \textit{fire hawk} secara tidak sengaja. Perilaku ini dapat dianggap sebagai proses pembaruan posisi yang dituliskan dengan persamaan berikut:\\
+
+\begin{align}
+    PR_q^{\textit{new}}=PR_q+(r_3\times FH_l-r_4\times SP_l), \quad l = 1, 2, \ldots, n, \text{ dan } q = 1, 2, \ldots, r.
+\end{align}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{Gambar FHO/img391.jpg}
+    \caption{Skema Proses Pembaruan Posisi Mangsa di Luar Teritori Elang Api (\mycite{azizi2023fire})}
+    \label{Skema proses pembaruan posisi mangsa di luar teritori elang api}
+\end{figure}
+
+Notasi $PR_q^{\textit{new}}$ menyatakan vektor posisi baru dari mangsa ke-$q$ ($PR_q$) dikelilingi oleh \textit{fire hawk} ke-$l$ ($FH_l$), $GB$ adalah solusi global terbaik di ruang pencarian dianggap sebagai api utama, $SP_l$ adalah tempat aman di dalam teritori \textit{fire hawk} ke-$l$, dan $r_3$ dan $r_4$ adalah bilangan acak yang terdistribusi seragam dalam rentang $(0,1)$ untuk menentukan pergerakan dari mangsa menuju ke \textit{fire hawk} dan tempat aman. Gambar \ref{Skema proses pembaruan posisi mangsa di luar teritori elang api} menunjukkan skema pembaruan posisi mangsa.\\
+
+Selain itu, mangsa melakukan pergerakan menuju teritori \textit{fire hawk} lain ketika ada kemungkinan mangsa akan mendekat ke \textit{fire hawk} di dekat semak-semak atau bahkan bersembunyi di tempat yang lebih aman di luar teritori \textit{fire hawk} yang membuat mereka terjebak. Perilaku ini dapat dianggap sebagai proses pembaruan posisi yang dapat dituliskan dalam persamaan berikut.
+
+\begin{align}
+    PR_q^{\textit{new}}=PR_q+(r_5\times FH_{Alter}-r_6\times SP), \quad l = 1, 2, \ldots, n \text{ dan } q = 1, 2, \ldots, r.
+\end{align}
+
+Notasi $PR_q^{\textit{new}}$ menyatakan vektor posisi baru dari mangsa ke-$q$ ($PR_q$) dikelilingi oleh \textit{fire hawk} ke-$l$ ($FH_l$), $FH_{Alter}$ adalah salah satu \textit{fire hawk} lain di ruang pencarian, $SP$ adalah tempat aman di luar teritori \textit{fire hawk} ke-$l$, $r_5$ dan $r_6$ adalah bilangan acak yang terdistribusi seragam dalam rentang $(0,1)$ untuk menentukan pergerakan dari mangsa menuju \textit{fire hawk} lain dan tempat aman di luar teritori.\\
+
+Berdasarkan fakta bahwa tempat aman di alam biasanya berupa lokasi di mana sebagian besar hewan berkumpul agar tetap aman dan nyaman selama terdapat ancaman, $SP_l$ dan $SP$ dapat diformulasikan sebagai berikut:
+
+\begin{align}
+    \text{SP}_1 &= \frac{\sum_{q=1}^r \text{PR}_q}{r}, \quad q = 1, 2, \ldots, r \text{ dan } l = 1, 2, \ldots, n.\end{align}
+\begin{align}
+    \text{SP} &= \frac{\sum_{k=1}^m \text{PR}_k}{m}, \quad k = 1, 2, \ldots, m.
+\end{align}
+    
+Notasi $PR_q$ menyatakan mangsa ke-$q$ yang dikelilingi oleh \textit{fire hawk} ke-$l$ ($FH_l$) dan $PR_k$ adalah mangsa ke-$k$ di ruang pencarian.\\
+
+Perlu diperhatikan bahwa teritori dari tiap \textit{fire hawk} diasumsikan sebagai daerah melingkar untuk tujuan visualisasi skema, sehingga definisi dari teritori tergantung jarak secara keseluruhan dari mangsa dan \textit{fire hawk}. Dengan kata lain ketika mangsa diposisikan di teritori \textit{fire hawk} tertentu, diasumsikan mangsa dipengaruhi oleh \textit{fire hawk} tersebut dan bukan yang lain, sehingga jumlah dari mangsa dan jarak mereka terhadap \textit{fire hawk} ditentukan oleh batas dari teritori \textit{fire hawk}. Sedangkan, kemungkinan mangsa berada di luar teritori mereka juga dianggap proses pembaruan posisi terkait fakta bahwa mangsa harus dipengaruhi oleh \textit{fire hawk} dari teritori \textit{fire hawk} lain. Jumlah mangsa tiap \textit{loop} adalah total jumlah kandidat solusi dikurangi dengan jumlah \textit{fire hawk} yang ditentukan secara acak menggunakan \textit{brownian motion} dengan distribusi normal sebagai salah satu distribusi terkenal yang digunakan dalam prosedur pengacakan.\\
+
+Kriteria pemberhentian pada algoritma FHO ini menggunakan kekonvergenan iterasi (\mycite{talbi2009metaheuristics}). Konvergensi terjadi ketika perbaikan solusi antara iterasi berturut-turut menjadi sangat kecil atau tidak signifikan. Lebih rincinya algoritma dihentikan ketika pertidaksamaan berikut dipenuhi, yaitu
+
+\begin{align*}
+    \frac{|f(GB_{t+1}-f(GB_T)|}{|f(GB_t)|} < \epsilon.
+\end{align*}
+
+ Notasi $f(GB_t)$ menyatakan nilai fungsi objektif dari solusi global terbaik (\textit{Global Best}) pada iterasi ke-$t$, $f(GB_{t+1})$ adalah nilai fungsi objektif dari GB pada iterasi berikutnya, dan $\epsilon$ adalah ambang batas toleransi yang sangat kecil (misalnya, $10^{-6}$). Jika kondisi ini terpenuhi untuk sejumlah iterasi berturut-turut (misalnya, 5 atau 10 iterasi), algoritma dianggap telah konvergen dan dapat dihentikan. Kriteria ini memastikan bahwa algoritma berhenti ketika peningkatan kualitas solusi menjadi minimal yang mengindikasikan bahwa solusi optimal atau mendekati optimal telah ditemukan.
+
+Aspek umum dari FHO termasuk pelanggaran batas dari solusi kandidat di samping kriteria penghentian juga dipertimbangkan dalam model matematika dari algoritma ini. Dalam hal ini, ketentuan matematika juga diimplementasikan dalam algoritma FHO yang mana kontrol batas untuk variabel keputusan yang dilanggar ditentukan, sementara sejumlah evaluasi fungsi objektif atau iterasi yang telah ditentukan sebelumnya atau bahkan kriteria lain seperti kekonvergenan dapat digunakan sebagai kriteria penghentian. Disajikan \textit{pseudo-code} dan \textit{flowchart} dari algoritma FHO di bawah ini.
+
+\begin{algorithm}
+\begin{varwidth}{\linewidth}
+\caption{Fire Hawk Optimizer (FHO)}
+\begin{algorithmic}[1]
+\Procedure{Fire Hawk Optimizer}{}
+    \State Ditentukan posisi awal dari kandidat solusi $(X_i)$ di raung pencarian dengan $N$ kandidat
+    \State Evaluasi nilai \textit{fitness} untuk kandidat solusi awal
+    \State Ditentukan solusi global terbaik (GB) sebagai ai utama
+    \While{Iterasi $\leq$ iterasi maksimum $\wedge$ konvergensi \textit{counter} $\leq$ iterasi konvergensi maksimum}
+        \State Dibentuk $n$ bilangan bulat untuk menentukan jumlah elang api
+        \State Ditentukan elang api (FH) dan mangsa-mangsa (PR) di ruang pencarian
+        \State Dikalkulasikan total jarak antara elang api dan mangsa-mangsa
+        \State Ditentukan teritori elang api dengan menyebarkan mangsa-mangsa
+        \For{$l = 1:n$}
+            \State Ditentukan posisi baru dari elang api berdasarkan persamaan (3.6)
+            \For{$q = 1:r$}
+                \State Dikalkulasikan tempat aman di dalam teritori elang api pada persamaan (3.9)
+                \State Ditentukan posisi baru dari mangsa-mangsa pada persamaan (3.7)
+                \State Dikalkulasikan tempat aman di luar teritori elang api pada persamaan (3.10)
+                \State Ditentukan posisi baru dari mangsa-mangsa pada persamaan (3.8)
+            \EndFor
+        \EndFor
+        \State Evaluasi nilai \textit{fitness} untuk elang api dan mangsa-mangsa baru
+        \State Ditentukan solusi global terbaik (GB) sebagai api utama
+    \EndWhile
+    \State \Return GB
+\EndProcedure
+\end{algorithmic}
+\end{varwidth}
+\end{algorithm}
+
+Untuk lebih memudahkan penjelasan dari algoritma \textit{Fire Hawk Optimizer} diilustrasikan flowchart algoritma \textit{Fire Hawk Optimizer} pada Gambar \ref{Flowchart FHO} dan Contoh \ref{contoh3.2.1}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.75]{Gambar FHO/FHO.drawio.png}
+    \caption{Flowchart FHO}
+    \label{Flowchart FHO}
+\end{figure}
+
+\begin{contoh}
+Akan digunakan algoritma FHO untuk mencari nilai $(x,y)$ yang meminimumkan $f(x,y) = x^2 + y^2$, dengan $-5\leq x \leq 5$ dan $-5\leq y \leq 5$.
+\subsection*{1. Inisialisasi}
+Misalkan digunakan 5 kandidat solusi di $\R^2$, yaitu 
+\begin{align*}
+    X &= \begin{bmatrix}
+        -2.1 & 3.4 \\
+        1.5 & -0.8 \\
+        4.2 & 2.7 \\
+        -3.6 & -1.9 \\
+        0.3 & 4.5
+    \end{bmatrix}.
+\end{align*}
+
+\subsection*{2. Evaluasi dan Seleksi}
+Selanjutnya ditentukan nilai fungsi untuk setiap kandidat sebagai berikut
+\begin{align*}
+    &f(-2.1, 3.4) = (-2.1)^2 + (3.4)^2 = 4.41 + 11.56 = 15.97, \\
+    &f(1.5, -0.8) = (1.5)^2 + (-0.8)^2 = 2.25 + 0.64 = 2.89 ,\\
+    &f(4.2, 2.7) = (4.2)^2 + (2.7)^2 = 17.64 + 7.29 = 24.93, \\
+    &f(-3.6, -1.9) = (-3.6)^2 + (-1.9)^2 = 12.96 + 3.61 = 16.57, \\
+    &f(0.3, 4.5) = (0.3)^2 + (4.5)^2 = 0.09 + 20.25 = 20.34.
+\end{align*}
+
+Selanjutnya, dipilih 2 \textit{fire hawk} terbaik kandidat solusi dengan nilai fungsi terendah dan 3 mangsa:
+\begin{align*}
+    FH &= \begin{bmatrix}
+        1.5 & -0.8 \\
+        -2.1 & 3.4
+    \end{bmatrix}, \\
+    PR &= \begin{bmatrix}
+        -3.6 & -1.9 \\
+        0.3 & 4.5 \\
+        4.2 & 2.7
+    \end{bmatrix}.
+\end{align*}
+
+\subsection*{3. Penentuan teritori}
+Berikutnya dihitung jarak antara setiap \textit{fire hawk} dan mangsa.
+Untuk $FH_1 = [1.5, -0.8]$, diperoleh
+\begin{flushleft}
+\begin{align*}
+    D_1^1 &= \sqrt{(1.5 - (-3.6))^2 + (-0.8 - (-1.9))^2} = 5.22, \\
+    D_2^1 &= \sqrt{(1.5 - 0.3)^2 + (-0.8 - 4.5)^2} = 5.39, \\
+    D_3^1 &= \sqrt{(1.5 - 4.2)^2 + (-0.8 - 2.7)^2} = 4.54.
+\end{align*}
+\end{flushleft}
+Untuk $FH_2 = [-2.1, 3.4]$, didapat
+\begin{align*}
+    D_1^2 &= \sqrt{(-2.1-(-3.6))^2 + (3.4-(-1.9))^2} = 5.59, \\
+    D_2^2 &= \sqrt{(-2.1-0.3)^2 + (3.4-4.5)^2} = 2.69, \\
+    D_3^2 &= \sqrt{(-2.1-4.2)^2 + (3.4-2.7)^2} = 6.37.
+\end{align*}
+
+\subsection*{4. Pembaruan Posisi \textit{Fire hawk}}
+Misalkan $r_1 = 0.3$, $r_2 = 0.5$, dan $GB = [1.5, -0.8]$ (\textit{fire hawk} terbaik).
+Untuk $FH_1$, didapat
+\begin{align*}
+    FH_1^{new} &= [1.5, -0.8] + (0.3 \times [1.5, -0.8] - 0.5 \times [-2.1, 3.4]) \\
+    &= [1.5, -0.8] + [0.45, -0.24] - [-1.05, 1.7] \\
+    &= [3.0, -2.74].
+\end{align*}
+Untuk $FH_2$, diperoleh
+\begin{align*}
+    FH_2^{new} &= [-2.1, 3.4] + (0.3 \times [1.5, -0.8] - 0.5 \times [1.5, -0.8]) \\
+    &= [-2.1, 3.4] + [0.45, -0.24] - [0.75, -0.4] \\
+    &= [-2.4, 3.56].
+\end{align*}
+
+\subsection*{5. Pembaruan Posisi Mangsa}
+Misalkan $r_3 = 0.4$, $r_4 = 0.6$. Ditentukan tempat aman untuk teritori $FH_1$ (misalkan $PR_1$ dan $PR_3$ ada di teritori ini):
+\begin{align*}
+    SP_1 &= \frac{[-3.6, -1.9] + [4.2, 2.7]}{2} = [0.3, 0.4]
+\end{align*}
+
+Pembaruan posisi $PR_1$:
+\begin{align*}
+    PR_1^{new} &= [-3.6, -1.9] + (0.4 \times [1.5, -0.8] - 0.6 \times [0.3, 0.4]) \\
+    &= [-3.6, -1.9] + [0.6, -0.32] - [0.18, 0.24] \\
+    &= [-3.18, -2.46]
+\end{align*}
+
+\subsection*{6. Evaluasi dan Iterasi}
+Dievaluasi posisi baru dan ulangi proses dari langkah 2 sampai kriteria penghentian terpenuhi (misalnya, jumlah iterasi maksimum atau konvergensi tercapai).
+
+\subsection*{7. Solusi}
+Setelah beberapa iterasi, algoritma akan konvergen ke titik (0,0), yang merupakan minimum global dari fungsi $f(x,y) = x^2 + y^2.$
+\label{contoh3.2.1}
+\end{contoh}
+
+Diselesaikan juga permasalahan sederhana sistem \textit{electric bike-sharing} pada Contoh \ref{contoh3.1.7} menggunakan algoritma \textit{Fire Hawk Optimizer} 
+
+\begin{contoh}
+    Akan digunakan permasalahan pada Contoh \ref{contoh3.1.7} dengan menggunakan algoritma \textit{Fire Hawk Optimizer.}
+
+\subsection*{1. Inisialisasi}
+Ditentukan jumlah kandidat solusi $(X)$ sebagai vektor posisi dari \textit{fire hawk} dan mangsa, serta ditentukan inisialisasi secara acak sebagai nilai awal vektor posisi di ruang pencarian sebagai berikut,
+
+\begin{align*}
+    X &= \begin{bmatrix}
+    2 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 2 \\
+    0 & 3 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\
+    2 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1 \\
+    2 & 1 & 1 & 0 & 0 & 1 & 3 & 0 & 1 & 0 \\
+    1 & 2 & 0 & 1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+    3 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\
+    1 & 2 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 0 \\
+    1 & 2 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 \\
+    3 & 0 & 1 & 0 & 1 & 0 & 2 & 0 & 0 & 0 \\
+    0 & 3 & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 2
+\end{bmatrix}.
+\end{align*}
+% \begin{align*}
+%     x_i^j(0) &= x_{i,\text{min}}^j + \text{rand}( x_{i,\text{max}}^j - x_{i,\text{min}}^j ) \quad \left\{
+%     \begin{array}{l}
+%     i = 1, 2, \ldots, N \\
+%     j = 1, 2, \ldots, d
+%     \end{array}
+%     \right.
+% \end{align*}
+
+\subsection*{2. Evaluasi dan Seleksi}
+Fungsi objektif dievaluasi untuk memilih kandidat solusi dari permasalahan. Beberapa kandidat solusi dengan nilai fungsi objektif terbaik direpresentasikan sebagai \textit{fire hawk}, sedangkan kandidat solusi lain dianggap sebagai mangsa. Sehingga didapat \textit{fire hawk} dan mangsa sebagai berikut
+\begin{align*}
+    FH = \begin{bmatrix}
+    3 & 0 & 1 & 0 & 1 & 0 & 2 & 0 & 0 & 0\\
+    2 & 1 & 1 & 0 & 0 & 1 & 3 & 0 & 1 & 0    
+\end{bmatrix},
+\end{align*}
+dan
+\begin{align*}
+    PR = \begin{bmatrix}
+    3 & 0 & 0 & 1 & 0 & 1 & 0 & 0 & 0 & 0 \\
+    2 & 1 & 0 & 1 & 1 & 0 & 0 & 1 & 0 & 1 \\
+    0 & 3 & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 2 \\
+    0 & 3 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 1 \\
+    1 & 2 & 0 & 1 & 0 & 1 & 1 & 1 & 0 & 0 \\
+    1 & 2 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 0 \\
+    2 & 1 & 0 & 1 & 0 & 1 & 0 & 0 & 1 & 2 \\
+    1 & 2 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 0
+\end{bmatrix}.
+\end{align*}
+Notasi $PR$ menyatakan mangsa di ruang pencarian, dan $FH_l$ adalah \textit{fire hawk} di ruang pencarian.
+\subsection*{3. Penentuan teritori}
+Selanjutnya, dihitung jumlah jarak antara \textit{fire hawk} dan mangsa untuk menentukan teritori yang efektif. Pada generasi awal ini, terdapat 2 \textit{fire hawk} sehingga dibentuk 2 teritori. Sebagai contoh untuk teritori pertama yaitu teritori elang api dengan nilai fungsi objektif terbaik didapatkan jarak sebagai berikut.
+\begin{align*}
+    D_1^1 &= 2,8284271247461903,\\
+    D_2^1 &= 3,1622776601683795,\\
+    D_3^1 &= 3,7416573867739413,\\
+    D_4^1 &= 3,7416573867739413,\\
+    D_5^1 &= 3,872983346207417,\\
+    D_6^1 &= 4,0.
+\end{align*}
+
+\subsection*{4. Update Posisi \textit{Fire Hawk}}
+Selanjutnya, posisi dari \textit{fire hawk} diperbarui sebagai berikut
+\begin{align*}
+    FH_l^{\textit{new}}=FH_l+(r_1\times GB-r_2\times FH_{\textit{near}}), l=1,2,\ldots,n.
+\end{align*}
+
+Notasi $FH_l^{\textit{new}}$ menyatakan vektor posisi baru dari \textit{fire hawk} ($FH_l$) ke-$l$, $GB$ adalah solusi global terbaik di ruang pencarian yang dianggap sebagai api utama, $FH_{\textit{near}}$ adalah salah satu \textit{fire hawk} lain di ruang pencarian, dan $r_1$ dan $r_2$ adalah bilangan acak yang terdistribusi seragam dalam rentang $(0,1)$.
+
+Misalkan $r_1 = 0.3$, $r_2 = 0.5$, $GB = [3,0,0,1,0,1,0,0,0,0]$, dan $FH_{\textit{near}} = [2,1,1,0,0,1,3,0,1,0]$, maka untuk $FH_1$, didapat
+\begin{align*}
+    FH_1^{\textit{new}} &= [3,0,1,0,1,0,2,0,0,0] + (0.3 \times [3,0,0,1,0,1,0,0,0,0] \\
+    &\indent - 0.5 \times [2,1,1,0,0,1,3,0,1,0])\\
+    &= [3,0,1,0,1,0,2,0,0,0] + [0.9,0,0,0.3,0,0.3,0,0,0,0]\\ 
+    &\indent - [1,0.5,0.5,0,0,0.5,1.5,0,0.5,0]\\
+    &= [2.9,-0.5,0.5,0.3,1,-0.2,0.5,0,-0.5,0]
+\end{align*}
+
+\subsection*{5. Tempat Aman dan Update Posisi Mangsa}
+Tempat aman dari teritori 1 didapatkan dengan menghitung rata-rata dari semua mangsa di teritori 1 sebagai berikut
+\begin{align*}
+    SP_1 = \begin{bmatrix}
+    1.66666667\\1.33333333\\0.\\1.\\0.33333333\\0.66666667\\0.33333333\\0.5\\0.5\\0.5       
+    \end{bmatrix}.
+\end{align*}
+Ketika kayu yang terbakar dijatuhkan, mangsa memutuskan untuk bersembunyi, melarikan diri, atau berlari ke arah \textit{fire hawk} secara tidak sengaja sehingga terdapat pembaruan posisi mangsa. Sebagai contoh pada mangsa ke 1 jika di dalam teritori didapatkan posisi berikut
+
+\begin{align*}
+    PR_1^{\textit{new}} &= PR_1 + (r_3 \times FH_1 - r_4 \times SP_1)
+\end{align*}.
+Misalkan $r_3 = 0.4$ dan $r_4 = 0.6$, maka didapat
+\begin{align*}
+    PR_1^{\textit{new}} &= [3,0,0,1,0,1,0,0,0,0] + (0.4 \times [3,0,1,0,1,0,2,0,0,0]\\
+    &\indent - 0.6 \times [1.6667,1.3333,0.3333,0.6667,0.6667,0.3333,0,0.6667,0,1])\\
+    &= [3,0,0,1,0,1,0,0,0,0] + [1.2,0,0.4,0,0.4,0,0.8,0,0,0] - \\
+    &\indent [1,0.8,0.2,0.4,0.4,0.2,0,0.4,0,0.6]\\
+    &= [3.2,-0.8,0.2,0.6,0,0.8,0.8,-0.4,0,-0.6]
+\end{align*}.
+
+\subsection*{6. Solusi}
+Proses di atas dilakukan sebanyak 100 generasi dan didapatkan keputusan terbaik
+\begin{align*}
+    X = \begin{bmatrix}
+    2 & 1 & 1 & 0 & 0 & 1 & 3 & 1 & 1 & 2
+    \end{bmatrix},
+\end{align*}
+yaitu 2 jam operasional untuk sepeda reguler dan 1 jam untuk premium di malam hari. Jika cuaca cerah, operator menambahkan 1 jam operasional untuk sepeda reguler, sehingga jam operasional yang digunakan adalah 3 jam reguler dan 1 jam premium. Jika cuaca hujan, operator menambahkan 1 jam operasional untuk sepeda premium, sehingga jam operasional yang digunakan adalah 2 jam reguler dan 2 jam premium. Strategi ini menghasilkan ekspektasi penggunaan sebesar 3,7 jam per hari.
+
+\end{contoh}

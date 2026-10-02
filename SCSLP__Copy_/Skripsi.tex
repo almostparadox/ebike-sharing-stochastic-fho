@@ -1,0 +1,713 @@
+\documentclass{skripsimathugm}
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk data Skripsi (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\titleind{
+OPTIMALISASI SISTEM \textit{ELECTRIC BIKE-SHARING} DI YOGYAKARTA DENGAN PENDEKATAN OPTIMISASI STOKASTIK DUA TAHAP MENGGUNAKAN \textit{FIRE HAWK OPTIMIZER}
+}
+
+\titleeng{
+ELECTRIC BIKE-SHARING SYSTEM OPTIMIZATION IN YOGYAKARTA WITH TWO-STAGE STOCHASTIC OPTIMIZATION APPROACH USING FIRE HAWK OPTIMIZER}
+
+\fullname{Saddam Aditya Hartanto}
+\NIM{20/459353/PA/20014}
+\yearenrollment{2020}
+\examdate{17 Oktober 2024}
+\degree{Sarjana Matematika}
+\yearsubmit{2024}
+\firstsupervisor{Dr. Noorma Yulia Megawati, M.Sc.}
+\firstexaminer{Dr. Fajar Adi Kusumo, S.Si., M.Si.}
+\secondexaminer{Dr. Indarsih, S.Si., M.Si.}
+\thirdexaminer{Dr.rer.nat. Yeni Susanti, S.Si., M.Si.}
+
+
+
+\begin{document}
+
+\cover\titlepage
+\approvalpage
+\declarepage
+%Setelah Anda selesai Ujian Akhir Skripsi, scan halaman pengesahan yang telah ditandatangani dosen pembimbing dan penguji, scan juga halaman pernyataan yang telah Anda tandatangani. Selanjutnya simpan hasil scan tersebut dalam bentuk PDF dengan nama pengesahanskripsi.pdf dan pernyataan.pdf (file disimpan di folder yang sama dengan folder dimana file Skripsi.tex tersimpan)
+%Hilangkan karakter % sebelum perintah "\approvalpagescan" dan "\declarepage" di bawah ini, dan tambahkan karakter % sebelum perintah "\approvalpage" di atas.
+%\approvalpagescan
+%\declarepagescan
+
+%-----------------------------------------------------------------
+%Halaman Persembahan (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+
+\acknowledment
+\begin{flushright}
+\Large\emph\cal{Untuk penulis di masa lalu\\
+yang telah berjuang dengan segala keterbatasan,\\
+tidak menyerah meski dalam kesulitan.}
+\end{flushright}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+%Halaman Motto (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\motto
+\emph{"\textit{Try to find the argmax over the things that you're interested in}"}
+\begin{flushright}
+(Andrej Karpathy)
+\end{flushright}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk Prakata (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\preface
+Puji dan syukur Penulis panjatkan ke hadirat Allah Subhanahu Wa Ta’ala, karena atas rahmat dan karunia-Nya Penulis bisa menyelesaikan Skripsi yang berjudul ”Optimalisasi Sistem \textit{Electric Bike-Sharing} dengan Pendekatan Optimisasi Stokastik Dua Tahap Menggunakan \textit{Fire Hawk Optimizer}”. Shalawat serta salam Penulis curahkan kepada Nabi Muhammad Shalallahu’Alaihi Wassalam dan semoga kita mendapatkan syafaatnya kelak.
+
+Penulisan Skripsi ini bertujuan untuk memenuhi salah satu syarat memperoleh gelar sarjana Program Studi S1 Matematika Fakultas Matematika dan Ilmu Pengetahuan Alam Universitas Gadjah Mada. Dalam penulisan dan penyusunan Skripsi ini tentunya tidak terlepas dari bantuan, bimbingan dan dukungan dari berbagai pihak. Oleh karena itu, Penulis ingin menyampaikan ucapan terima kasih
+kepada :
+
+\begin{enumerate}
+    \item Prof. Dr. Eng. Kuwat Triyana, M.Si. selaku Dekan Fakultas Matematika dan Ilmu Pengetahuan Alam, Universitas Gadjah Mada
+    \item Dr. Nanang Susyanto, S.Si., M.Sc. selaku Ketua Departemen Matematika Fakultas Matematika dan Ilmu Pengetahuan Alam, Universitas Gadjah Mada.
+    \item Dr. Sutopo, S.Si., M.Si. selaku Ketua Program Sarjana Program Studi Matematika, Fakultas Matematika dan Ilmu Pengetahuan Alam, Universitas Gadjah Mada.
+    \item Dr. Noorma Yulia M., S.Si., M.Sc. selaku dosen pembimbing tugas akhir yang telah membimbing penulis, memberikan ilmu, semangat, dan motivasi sehingga penulis dapat menyelesaikan skripsi ini.
+    \item Prof. Dr.rer.nat. Indah Emilia Wijayanti, M.Si. selaku dosen pembimbing akademik penulis selama menimba ilmu di Program Studi Matematika, Universitas Gadjah Mada.
+    \item Seluruh civitas akademika Fakultas Matematika dan Ilmu Pengetahuan Alam, Universitas Gadjah Mada khususnya seluruh dosen yang telah sabar membagikan ilmunya kepada Penulis.
+    \item Ayah dan Ibu yang elalu memberikan dukungan moral dan motivasi kepada penulis untuk selalu melangkah ke depan, serta Adik tercinta Iqbal Prakusa Hartanto.
+    \item Amelia Gina Salsabila beserta keluarga yang turut memberikan dukungan maupun saran dalam penyusunan Tugas Akhir.
+    \item Dosen pendamping, PI-Koor, serta seluruh panitia LMNas 34 dan Semnastika 15 terkhusus Fauzan Nauvally Muhammad yang telah banyak membantu kesuksesan LMNas 34 dan Semnastika 15.
+    \item Madellin de Cartelle dan teman-teman Kondik yang sering menampung keluh kesah kuliah.
+    \item Tim \textit{Wastewater Surveillance} yang turut mendukung segera selesainya penulisan Tugas Akhir.
+    \item Teman-teman mahasiswa Program Studi S1 Matematika Angkatan 2020, kakak dan adik tingkat yang membersamai dan membantu Penulis baik dalam menjalani perkuliahan maupun dalam penyusunan Skripsi ini.
+    \item Seluruh pihak yang terlibat dalam proses penyelesaian Skripsi ini yang tidak dapat disebutkan satu per satu.
+\end{enumerate}
+
+\vspace{0.8cm}
+
+\begin{tabular}{p{7cm}c}
+&Yogyakarta, 17 Oktober 2024\\
+&\\
+&\\
+&Penulis
+\end{tabular}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+%Daftar Isi (TIDAK PERLU DIUBAH)
+%-----------------------------------------------------------------
+\newpage\phantomsection\addcontentsline{toc}{chapter}{DAFTAR ISI}
+\makeatletter\renewcommand\l@chapter[2]{\ifnum \c@tocdepth >\z@\addpenalty\@secpenalty\addvspace{0em}\setlength\@tempdima{1.4em}\begingroup\parindent \z@ \rightskip \@pnumwidth\parfillskip -\@pnumwidth\leavevmode \bfseries\advance\leftskip\@tempdima\hskip -\leftskip#1\nobreak\ \leaders\hbox{$\m@th\mkern \@dotsep mu\hbox{.}\mkern \@dotsep mu$}\hfil\nobreak\hb@xt@\@pnumwidth{\hss #2}\par\endgroup\fi}\makeatother
+\begin{singlespacing}\tableofcontents\end{singlespacing}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+%Daftar Tabel (JIKA DIPERLUKAN, HAPUS KARAKTER % SEBELUM \newpage dan \begin)
+%-----------------------------------------------------------------
+\newpage\phantomsection\addcontentsline{toc}{chapter}{DAFTAR TABEL}
+\begin{singlespacing}\listoftables\end{singlespacing}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+%Daftar Gambar (JIKA DIPERLUKAN, HAPUS KARAKTER % SEBELUM \newpage dan \begin)
+%-----------------------------------------------------------------
+\newpage\phantomsection\addcontentsline{toc}{chapter}{DAFTAR GAMBAR}
+\begin{singlespacing}\listoffigures\end{singlespacing}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+%Daftar Lambang (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\lambang
+\begin{tabular}{ccp{10.5cm}}
+$\Omega$ &:&  Himpunan skenario\\
+$K_\omega$ &:&  Himpunan perjalanan dalam skenario $\omega$\\
+$S$ &:&  Himpunan lokasi potensial stasiun\\
+$T$ &:&  Himpunan periode waktu\\
+$H$ &:&  Himpunan sepeda\\
+$\pi_\omega$ &:&  Probabilitas skenario $\omega$\\
+$p_k$ &:&  Kontribusi keuntungan perjalanan $k$\\
+$F_i$ &:&  Biaya pembangunan stasiun di lokasi $i$\\
+$F_{\text{bike}}$ &:&  Biaya pembelian satu sepeda\\
+$\varphi_i$ &:&  Biaya operasional stasiun $i$\\
+$\phi$ &:&  Biaya operasional per sepeda\\
+$C_i$ &:&  Kapasitas stasiun $i$\\
+$W$ &:&  Anggaran yang tersedia\\
+$o_k, d_k$ &:&  Asal dan tujuan perjalanan $k$\\
+$s_k, e_k$ &:&  Waktu mulai dan selesai perjalanan $k$\\
+$b_k$ &:&  Konsumsi baterai perjalanan $k$\\
+$\rho$ &:&  Laju pengisian daya per unit waktu\\
+$r$ &:&  Jarak maksimum yang diizinkan antar stasiun\\
+$y_i$ &:&  Variabel keputusan apakah stasiun $i$ dibangun\\
+$z_h$ &:&  Variabel keputusan apakah sepeda $h$ dibeli\\
+$x_k^\omega$ &:&  Variabel keputusan apakah perjalanan $k$ diterima dalam skenario $\omega$\\
+$x_k^{h,\omega}$ &:&  Variabel keputusan apakah perjalanan $k$ ditugaskan ke sepeda $h$ dalam skenario $\omega$\\
+$f_a^{h,\omega}$ &:&  Variabel keputusan apakah sepeda $h$ melintasi arc $a$ dalam skenario $\omega$\\
+\end{tabular}
+
+\begin{tabular}{ccp{10.5cm}}
+$G^\omega$ &:&  Graf lokasi dengan ekspansi waktu dalam skenario $\omega$\\
+$A_I^\omega$ &:&  Himpunan \textit{edge} alokasi awal dalam skenario $\omega$\\
+$A_W^\omega$ &:&  Himpunan \textit{edge} tunggu dalam skenario $\omega$\\
+$A_C^\omega$ &:&  Himpunan \textit{edge} pengumpulan akhir dalam skenario $\omega$\\
+$A_T^\omega$ &:&  Himpunan \textit{edge} perjalanan dalam skenario $\omega$\\
+$r^\omega$ &:&  Node akar dalam skenario $\omega$\\
+$s^\omega$ &:&  Node tujuan dalam skenario $\omega$\\
+\end{tabular}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+%Disini awal masukan Intisari (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\begin{abstractind}
+    Pertumbuhan pariwisata di Yogyakarta menuntut adanya sistem transportasi yang efisien, ramah lingkungan, dan mampu memenuhi kebutuhan mobilitas pengunjung serta masyarakat lokal. Sebagai salah satu alternatif transportasi berkelanjutan, sistem \textit{electric bike-sharing} memiliki potensi besar untuk mengurangi kemacetan dan emisi gas rumah kaca, sekaligus mendukung perkembangan sektor pariwisata yang lebih ramah lingkungan. Dalam skripsi ini dibahas mengenai optimalisasi penempatan stasiun pada sistem \textit{electric bike-sharing} di Yogyakarta, dengan pendekatan model optimisasi stokastik dua tahap yang dibangun berdasarkan ketidakpastian permintaan yang diselesaikan menggunakan algoritma \textit{Fire Hawk Optimizer} (FHO). Algoritma FHO dipilih karena keunggulannya dalam menghindari \textit{local optima}, konvergensi yang cepat, dan kemampuannya menangani masalah optimisasi kompleks dengan banyak variabel dan kendala. Dalam studi ini diselesaikan permasalahan penentuan lokasi stasiun secara optimal berdasarkan keuntungan terbaik dengan mempertimbangkan pola pergerakan pengguna, aksesibilitas ke lokasi-lokasi strategis, dan fluktuasi permintaan musiman. Hasil simulasi menunjukkan bahwa penerapan algoritma FHO pada sistem \textit{electric bike-sharing} mampu menghasilkan solusi yang optimal dalam hal pemilihan lokasi stasiun, pengalokasian trip, serta jumlah sepeda yang dibutuhkan, sehingga memberikan keuntungan maksimal bagi sistem secara keseluruhan.
+\end{abstractind}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk Abstract (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\begin{abstracteng}
+The growth of tourism in Yogyakarta demands an efficient, environmentally friendly transportation system that can meet the mobility needs of both visitors and local residents. As a sustainable transportation alternative, the electric bike-sharing system holds great potential for reducing traffic congestion and greenhouse gas emissions while supporting the development of a more eco-friendly tourism sector. This thesis discusses the optimization of station placement in the electric bike-sharing system in Yogyakarta, using a two-stage stochastic optimization model solved by the Fire Hawk Optimizer (FHO) algorithm. The study addresses the problem of determining optimal station locations by considering user movement patterns, accessibility to strategic locations, and seasonal demand fluctuations. The simulation results show that the application of the FHO algorithm in the electric bike-sharing system can produce optimal solutions in terms of station location selection, trip allocation, and the number of bikes required, thereby maximizing the overall system benefit.
+\end{abstracteng}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk Bab (ISI BAB I DAPAT DIEDIT DI FILE Bab1.tex,
+%ISI BAB II DAPAT DIEDIT DI FILE Bab2.tex, dst...)
+%-----------------------------------------------------------------
+\input{Bab1.tex}
+\input{Bab2.tex}
+\input{Bab3.tex}
+\input{Bab4.tex}
+\input{Bab5}
+
+%-----------------------------------------------------------------
+%Disini akhir masukan Bab
+%-----------------------------------------------------------------
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk Daftar Pustaka (ISI SESUAI DENGAN DATA ANDA!)
+%-----------------------------------------------------------------
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{DAFTAR PUSTAKA}
+
+\bibitem[Azizi dkk.(2023)]{azizi2023fire}
+Azizi, M. and Talatahari, S. and Gandomi, A. H., 2023, Fire Hawk Optimizer: a novel metaheuristic algorithm, \emph{Artificial Intelligence Review}, 56(1), 287--363.
+
+\bibitem[Bikeplus(2016)]{bikeplus2016shared} 
+Bikeplus, 2016. \emph{Shared Electric Bike Programme Report}. Carplus Trust, n.p..
+
+\bibitem[Billingsley(1995)]{billingsley1995probability}
+Billingsley, P., 1995, \emph{Probability and Measure}, 3rd ed., John Wiley \& Sons, New York.
+
+\bibitem[Birge dan Louveaux(2011)]{birge2011introduction}
+Birge, J. R., Louveaux, F., 2011, \emph{Introduction to stochastic programming}, Springer Science \& Business Media, London.
+
+\bibitem[Boyd dan Vandenberghe(2004)]{boyd2004convex}
+Boyd, S., Vandenberghe, L., 2004, \emph{Convex optimization}, Cambridge University Press, Cambridge.
+
+\bibitem[BPS(2020)]{bps2020yogyakarta}
+BPS, 2020, \emph{Statistik Kepariwisataan Daerah Istimewa Yogyakarta 2019}, Badan Pusat Statistik Provinsi D.I. Yogyakarta.
+
+\bibitem[Brandstätter dkk.(2017)]{brandstatter2017determining}
+Brandstätter, G. and Kahr, M. and Leitner, M., 2017, Determining optimal locations for charging stations of electric car-sharing systems under stochastic demand, \emph{Transportation Research Part B: Methodological}, 104, 17--35.
+
+\bibitem[Campbell dkk.(2016)]{campbell2016electric} 
+Campbell, A. A., Cherry, C. R., Ryerson, M. S., Yang, X., 2016. Factors influencing the choice of shared bicycles and shared electric bikes in Beijing. \emph{Transportation Research Part C: Emerging Technologies}, 67, 399-414.
+
+\bibitem[Casella dan Berger(2002)]{casella2002statistical}
+Casella, G. and Berger, R. L., 2002, \emph{Statistical Inference}, Duxbury.
+
+\bibitem[Chen dkk.(2020)]{chen2020electric}
+Chen, T. D. and Kockelman, K. M. and Khan, M., 2020, The electric vehicle charging station location problem: A parking-based assignment method for Seattle, \emph{Transportation Research Part D: Transport and Environment}, 78, 102132.
+
+\bibitem[Fishman(2020)]{fishman2020bikeshare}
+Fishman, E., 2020, Bikeshare: A Review of Recent Literature, \emph{Transport Reviews}, 40(6), 744--767.
+
+\bibitem[Fyhri dan Fearnley(2017)]{fyhri2017effect} 
+Fyhri, A., Fearnley, N., 2017. Effects of e-bikes on bicycle use and mode share. \emph{Transportation Research Part D: Transport and Environment}, 36, 45-52.
+
+\bibitem[Glover(1986)]{glover1986future} 
+Glover, F., 1986. \emph{Future paths for integer programming and links to artificial intelligence}. Computers \& operations research, 13(5), 533-549.
+
+\bibitem[Grimmett dan Stirzaker(2020)]{grimmett2020probability}
+Grimmett, G. and Stirzaker, D., 2020, \emph{Probability and Random Processes}, Oxford University Press, New York.
+
+\bibitem[Haight(1967)]{haight1967handbook}
+Haight, F. A., 1967, \emph{Handbook of the Poisson Distribution}, John Wiley \& Sons, New York.
+
+\bibitem[Hastie dkk.(2009)]{hastie2009elements}
+Hastie, T. and Tibshirani, R. and Friedman, J., 2009, \emph{The elements of statistical learning: data mining, inference, and prediction}, Springer Science \& Business Media, New York.
+
+\bibitem[Holland(1992)]{holland1992adaptation}
+Holland, J. H., 1992, \emph{Adaptation in natural and artificial systems: an introductory analysis with applications to biology, control, and artificial intelligence}, MIT Press, Cambridge, MA.
+
+\bibitem[Hunter(2007)]{hunter2007matplotlib}
+Hunter, J. D., 2007, Matplotlib: A 2D graphics environment, \emph{Computing in Science \& Engineering}, 9(3), 90--95.
+
+\bibitem[IEA(2021)]{iea2021global}
+IEA, 2021, \emph{Global EV Outlook 2021}, International Energy Agency, Paris.
+
+\bibitem[Langford dkk.(2013)]{langford2013comparing} 
+Langford, B. C., Cherry, C. R., Bassett Jr, D. R., Fitzhugh, E. C., Dhakal, N., 2013. Comparing physical activity of pedal-assist electric bikes with walking and conventional bicycles. \emph{Journal of Transport \& Health}, 4(1), 86-93.
+
+\bibitem[Ling dkk.(2017)]{ling2017emerging} 
+Ling, Z., Cherry, C. R., Yang, H., Jones, L. R., 2017. From e-bike to car: A study on factors influencing motorization of e-bike users across China. \emph{Transportation Research Part D: Transport and Environment}, 41, 50-63.
+
+\bibitem[Ma dkk.(2020)]{ma2020electric} 
+Ma, X., Yuan, Y., Van Oort, N., Hoogendoorn, S., 2020. Bike-sharing systems' impact on modal shift: A case study in Delft, the Netherlands. \emph{Journal of Cleaner Production}, 259, 120846.
+
+\bibitem[MacMichael(2021)]{roadcc2021}
+MacMichael, S., 2021, Plan for compulsory e-bike insurance in Spain faces fierce opposition, \emph{road.cc}, \url{https://road.cc/content/news/mandatory-bike-insurance-spain-291997} (diakses pada 20 September 2024).
+
+\bibitem[McKinney(2011)]{mckinney2011pandas}
+McKinney, W., 2011, pandas: a foundational Python library for data analysis and statistics, \emph{Python for High Performance and Scientific Computing}, 14(9), 1--9.
+
+\bibitem[Nocedal dan Wright(2006)]{nocedal2006numerical} 
+Nocedal, J., Wright, S., 2006. \emph{Numerical optimization}. Springer Science \& Business Media, New York, NY.
+
+\bibitem[O'Brien dkk.(2014)]{obrien2014mining}
+O'Brien, O. and Cheshire, J. and Batty, M., 2014, Mining bicycle sharing data for generating insights into sustainable transport systems, \emph{Journal of Transport Geography}, 34, 262--273.
+
+\bibitem[Pemkot Yogyakarta(2020)]{pemkot2020yogyakarta}
+Pemkot Yogyakarta, 2020, \emph{Rencana Pembangunan Jangka Menengah Daerah Kota Yogyakarta 2017-2022}, Pemerintah Kota Yogyakarta.
+
+\bibitem[Powell(2019)]{powell2019unified}
+Powell, W. B., 2019, A unified framework for stochastic optimization, \emph{European Journal of Operational Research}, 275(3), 795--821.
+
+\bibitem[Ross(1996)]{ross1996stochastic}
+Ross, S. M., 1996, \emph{Stochastic Processes}, John Wiley \& Sons, New York.
+
+\bibitem[Ross(2014)]{ross2014introduction}
+Ross, S. M., 2014, \emph{Introduction to Probability Models}, Academic Press, Burlington, MA.
+
+\bibitem[Shaheen et al.(2019)]{shaheen2019sharing}
+Shaheen, S., Cohen, A., Chan, N., Bansal, A., 2019, Sharing strategies: carsharing, shared micromobility (bikesharing and scooter sharing), transportation network companies, microtransit, and other innovative mobility modes, \emph{Transportation, Land Use, and Environmental Planning}, 237--262.
+
+\bibitem[Sun dkk.(2018)]{sun2018data} 
+Sun, Y., Mobasheri, A., Hu, X., Wang, W., 2018. Investigating impacts of environmental factors on the cycling behavior of bicycle-sharing users. \emph{Sustainability}, 9(6), 1060.
+
+\bibitem[Talbi(2009)]{talbi2009metaheuristics}
+Talbi, E. G., 2009, Metaheuristics: from design to implementation, \emph{John Wiley \& Sons}, Hoboken, NJ, 37--39.
+
+\bibitem[UNFCCC(2015)]{unfccc2015paris}
+UNFCCC, 2015, \emph{Paris Agreement}, United Nations, Paris.
+
+\bibitem[UN(2015)]{un2015transforming}
+United Nations General Assembly, 2015, Transforming our world: The 2030 agenda for sustainable development, \emph{United Nations General Assembly}, A/RES/70/1. Available at: \url{https://sustainabledevelopment.un.org/post2015/transformingourworld}.
+
+\bibitem[Wilson(1996)]{wilson1996introduction}
+Wilson, R. J., 1996, \emph{Introduction to Graph Theory}, Longman, Harlow.
+
+\bibitem[Winston dan Goldberg(2004)]{winston2004operations}
+Winston, W. L. and Goldberg, J. B., 2004, \emph{Operations research: applications and algorithms}, Vol. 3, Thomson Brooks/Cole, Belmont.
+
+\bibitem[Zhu dkk.(2016)]{zhu2016charging}
+Zhu, L. and Gonder, J. and Lin, Z., 2016, Charging station location problem of plug-in electric vehicles, \emph{Journal of Transport Geography}, 52, 11--22.
+
+\end{thebibliography}
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+
+
+%-----------------------------------------------------------------
+%Disini awal masukan untuk Lampiran (JIKA DIPERLUKAN)
+%-----------------------------------------------------------------
+\appendix
+
+\chapter{DATA}
+
+\begin{table}[H]
+\centering
+\caption{Data Stasiun}
+\label{Station Data}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+\textbf{station\_id} & \textbf{capacity} & \textbf{opening\_cost} & \textbf{latitude} & \textbf{longitude} \\
+\hline
+0 & 8 & 64475368 & -7.7891 & 110.3614 \\
+1 & 7 & 29062142 & -7.7931 & 110.3656 \\
+2 & 8 & 53604018 & -7.7824 & 110.3750 \\
+3 & 5 & 54169124 & -7.7830 & 110.3657 \\
+4 & 5 & 70770109 & -7.7801 & 110.3712 \\
+5 & 9 & 79681206 & -7.7764 & 110.3632 \\
+6 & 6 & 68409814 & -7.816507590225311 & 110.37882377262206 \\
+7 & 9 & 58627082 & -7.764545623765107 & 110.36998599777583 \\
+8 & 9 & 87155237 & -7.758517422697779 & 110.38959483165141 \\
+9 & 10 & 56627802 & -7.804273754947625 & 110.4149690263108 \\
+10 & 5 & 64476799 & -7.758885258655926 & 110.32442053616289 \\
+11 & 9 & 55915390 & -7.7667612206468375 & 110.41185548735434 \\
+12 & 10 & 64731553 & -7.810665575510653 & 110.39030027249711 \\
+13 & 5 & 57354989 & -7.797234234968725 & 110.32582055624444 \\
+14 & 7 & 52547174 & -7.815663727363731 & 110.34298468522442 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Weekday Data Skenario dan Profit}
+\label{Weekday Data Skenario dan Profit}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Trip ID} & \textbf{Destination} & \textbf{Profit} \\
+\hline
+
+Weekdays & 0 & (-7.792931179673451, 110.36593183784399) & 30000000 \\
+Weekdays & 1 & (-7.775647815981623, 110.36724251595128) & 20000000 \\
+Weekdays & 2 & (-7.800520210506863, 110.41480096138257) & 20000000 \\
+Weekdays & 3 & (-7.769890027550567, 110.41249566091625) & 20000000 \\
+Weekdays & 4 & (-7.812769098888491, 110.39224477396209) & 20000000 \\
+Weekdays & 5 & (-7.776569094401348, 110.37288896664307) & 30000000 \\
+Weekdays & 6 & (-7.805526526949287, 110.41676671215377) & 10000000 \\
+Weekdays & 7 & (-7.770438134482901, 110.36159240469725) & 30000000 \\
+Weekdays & 8 & (-7.805665405269387, 110.41645859073208) & 20000000 \\
+Weekdays & 9 & (-7.805541747688057, 110.38990179513809) & 10000000 \\
+Weekdays & 10 & (-7.761427938777749, 110.32886417224998) & 30000000 \\
+Weekdays & 11 & (-7.800388527425106, 110.32471770304838) & 20000000 \\
+Weekdays & 12 & (-7.801710289960986, 110.32659754105705) & 30000000 \\
+Weekdays & 13 & (-7.800040916629955, 110.41611241279443) & 20000000 \\
+Weekdays & 14 & (-7.754633697351422, 110.32873446979093) & 30000000 \\
+Weekdays & 15 & (-7.796324586945069, 110.36600172032915) & 20000000 \\
+Weekdays & 16 & (-7.763738531763849, 110.32534399418394) & 30000000 \\
+Weekdays & 17 & (-7.771354263023364, 110.41488578879236) & 30000000 \\
+Weekdays & 18 & (-7.803140288211153, 110.32618939992823) & 10000000 \\
+Weekdays & 19 & (-7.764528569476906, 110.3198398775548) & 30000000 \\
+Weekdays & 20 & (-7.793381694707156, 110.36545130279752) & 30000000 \\
+Weekdays & 21 & (-7.783222844979383, 110.37109768424821) & 30000000 \\
+Weekdays & 22 & (-7.814171214257905, 110.38299766811353) & 20000000 \\
+Weekdays & 23 & (-7.805631999110501, 110.39071673422443) & 30000000 \\
+Weekdays & 24 & (-7.785064224320225, 110.36569285174483) & 10000000 \\
+Weekdays & 25 & (-7.820291802236042, 110.38370114302596) & 10000000 \\
+Weekdays & 26 & (-7.788425603038559, 110.3618555932266) & 10000000 \\
+Weekdays & 27 & (-7.781567806650796, 110.36698710627229) & 30000000 \\
+Weekdays & 28 & (-7.760737076884888, 110.32272475287424) & 30000000 \\
+Weekdays & 29 & (-7.76346096101143, 110.39499553264821) & 10000000 \\
+
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[H]
+\centering
+\caption{Saturday Data Skenario dan Profit}
+\label{Saturday Data Skenario dan Profit}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Trip ID} & \textbf{Destination} & \textbf{Profit} \\
+\hline
+
+Saturday & 0 & (-7.75871107773189, 110.39134815553926) & 20000000 \\
+Saturday & 1 & (-7.818683948045408, 110.38043422876682) & 10000000 \\
+Saturday & 2 & (-7.819162310093343, 110.37643519677164) & 10000000 \\
+Saturday & 3 & (-7.793072124436985, 110.36907039943321) & 10000000 \\
+Saturday & 4 & (-7.815685814372376, 110.34690484321186) & 30000000 \\
+Saturday & 5 & (-7.786874516259785, 110.36954395081311) & 30000000 \\
+Saturday & 6 & (-7.779588526556111, 110.37001583609423) & 30000000 \\
+Saturday & 7 & (-7.814312023834777, 110.39423259841826) & 10000000 \\
+Saturday & 8 & (-7.786823838943322, 110.36906116005858) & 30000000 \\
+Saturday & 9 & (-7.795136348660938, 110.33049748925366) & 10000000 \\
+Saturday & 10 & (-7.753613497144761, 110.32635997594211) & 10000000 \\
+Saturday & 11 & (-7.820813850628063, 110.3371846465614) & 20000000 \\
+Saturday & 12 & (-7.7607050501917065, 110.32083135006967) & 30000000 \\
+Saturday & 13 & (-7.794864016923349, 110.32354010961637) & 20000000 \\
+Saturday & 14 & (-7.7811530039246355, 110.37023645423197) & 30000000 \\
+Saturday & 15 & (-7.7792830658680945, 110.37132394967563) & 20000000 \\
+Saturday & 16 & (-7.757683191947154, 110.32297643633814) & 30000000 \\
+Saturday & 17 & (-7.78220799361297, 110.37915371308083) & 30000000 \\
+Saturday & 18 & (-7.798025226732104, 110.32777940593454) & 10000000 \\
+Saturday & 19 & (-7.817076175571514, 110.37979932423605) & 30000000 \\
+Saturday & 20 & (-7.777854216274366, 110.37343442033261) & 10000000 \\
+Saturday & 21 & (-7.791149772363954, 110.3702851624637) & 10000000 \\
+Saturday & 22 & (-7.785429750117955, 110.36018833237053) & 30000000 \\
+Saturday & 23 & (-7.787393884777669, 110.36406566304566) & 20000000 \\
+Saturday & 24 & (-7.811308255015415, 110.34260012329163) & 30000000 \\
+Saturday & 25 & (-7.813860746612476, 110.3918175913882) & 10000000 \\
+Saturday & 26 & (-7.81301638041292, 110.34033159647704) & 30000000 \\
+Saturday & 27 & (-7.767798790112538, 110.41504464936352) & 20000000 \\
+Saturday & 28 & (-7.782394523032584, 110.3670622693528) & 10000000 \\
+Saturday & 29 & (-7.7838892603336225, 110.37427530337268) & 30000000 \\
+
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[H]
+\centering
+\caption{Sunday Data Skenario dan Profit}
+\label{Sunday Data Skenario dan Profit}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Trip ID} & \textbf{Destination} & \textbf{Profit} \\
+\hline
+
+Sunday & 0 & (-7.754752211101029, 110.31954432750135) & 30000000 \\
+Sunday & 1 & (-7.801083456349155, 110.41582559786396) & 10000000 \\
+Sunday & 2 & (-7.786741537607359, 110.36497806889548) & 20000000 \\
+Sunday & 3 & (-7.77526140556621, 110.36610537165039) & 10000000 \\
+Sunday & 4 & (-7.79793487443431, 110.36460546575) & 10000000 \\
+Sunday & 5 & (-7.779393206442219, 110.37283933382679) & 30000000 \\
+Sunday & 6 & (-7.765079428939965, 110.40791648049658) & 30000000 \\
+Sunday & 7 & (-7.766483431597694, 110.36441998748231) & 20000000 \\
+Sunday & 8 & (-7.772728610153513, 110.4081503856958) & 10000000 \\
+Sunday & 9 & (-7.786007661386255, 110.3632971806047) & 10000000 \\
+Sunday & 10 & (-7.759109290071894, 110.3277243573456) & 10000000 \\
+Sunday & 11 & (-7.762074840637407, 110.4150550488201) & 10000000 \\
+Sunday & 12 & (-7.801513788859254, 110.32921371250177) & 10000000 \\
+Sunday & 13 & (-7.805540404637923, 110.39088484416312) & 20000000 \\
+Sunday & 14 & (-7.783618490223531, 110.36677941388547) & 10000000 \\
+Sunday & 15 & (-7.77096639688936, 110.41728666003176) & 30000000 \\
+Sunday & 16 & (-7.767945092577382, 110.3727601660306) & 30000000 \\
+Sunday & 17 & (-7.781030790251795, 110.37113705794233) & 30000000 \\
+Sunday & 18 & (-7.777079017004526, 110.3704256347233) & 30000000 \\
+Sunday & 19 & (-7.783838142517056, 110.36690204433873) & 30000000 \\
+Sunday & 20 & (-7.783720084159466, 110.36639890659504) & 20000000 \\
+Sunday & 21 & (-7.767531353710349, 110.36535251914106) & 10000000 \\
+Sunday & 22 & (-7.760215186126595, 110.38419678669128) & 20000000 \\
+Sunday & 23 & (-7.8204016238634235, 110.37917718252952) & 30000000 \\
+Sunday & 24 & (-7.783875491808733, 110.3759394151611) & 10000000 \\
+Sunday & 25 & (-7.792707835752402, 110.32539392047775) & 10000000 \\
+Sunday & 26 & (-7.798172099226585, 110.3650017074385) & 10000000 \\
+Sunday & 27 & (-7.759285126664732, 110.31979258704025) & 10000000 \\
+Sunday & 28 & (-7.791043820302062, 110.36105716198279) & 30000000 \\
+Sunday & 29 & (-7.8035972514521195, 110.4128934623853) & 10000000 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Weekday Data Skenario Lainnya}
+\label{Weekday Data Skenario Lainnya}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Trip ID} & \textbf{Start Time} & \textbf{End Time} & \textbf{Battery Consumption} & \textbf{Probability} \\
+\hline
+Weekdays & 0 & 5 & 8 & 0.062217669587698386 & 0.3 \\
+Weekdays & 1 & 0 & 2 & 0.10701353654407111 & 0.3 \\
+Weekdays & 2 & 0 & 2 & 0.11670451517626136 & 0.3 \\
+Weekdays & 3 & 2 & 4 & 0.08936807656614155 & 0.3 \\
+Weekdays & 4 & 6 & 8 & 0.20747699405596637 & 0.3 \\
+Weekdays & 5 & 11 & 14 & 0.024080815488423665 & 0.3 \\
+Weekdays & 6 & 2 & 3 & 0.10142192376549508 & 0.3 \\
+Weekdays & 7 & 7 & 10 & 0.054632223929739564 & 0.3 \\
+Weekdays & 8 & 7 & 9 & 0.12814905906809582 & 0.3 \\
+Weekdays & 9 & 6 & 7 & 0.019610493595530708 & 0.3 \\
+Weekdays & 10 & 9 & 12 & 0.2154004464729302 & 0.3 \\
+Weekdays & 11 & 7 & 9 & 0.08832422022992438 & 0.3 \\
+Weekdays & 12 & 5 & 8 & 0.19008947396952916 & 0.3 \\
+Weekdays & 13 & 0 & 2 & 0.11255325564876342 & 0.3 \\
+Weekdays & 14 & 6 & 9 & 0.0231471433421849 & 0.3 \\
+Weekdays & 15 & 11 & 13 & 0.09379349819987594 & 0.3 \\
+Weekdays & 16 & 2 & 5 & 0.17889024517920643 & 0.3 \\
+Weekdays & 17 & 9 & 12 & 0.13330727442589083 & 0.3 \\
+Weekdays & 18 & 11 & 12 & 0.014907193928993319 & 0.3 \\
+Weekdays & 19 & 11 & 14 & 0.2132098621812017 & 0.3 \\
+Weekdays & 20 & 4 & 7 & 0.03701767027148605 & 0.3 \\
+Weekdays & 21 & 7 & 10 & 0.06093130705466953 & 0.3 \\
+Weekdays & 22 & 4 & 6 & 0.07946732982412702 & 0.3 \\
+Weekdays & 23 & 8 & 11 & 0.05693256159547741 & 0.3 \\
+Weekdays & 24 & 5 & 6 & 0.08278664879613755 & 0.3 \\
+Weekdays & 25 & 4 & 5 & 0.12421131504639817 & 0.3 \\
+Weekdays & 26 & 1 & 2 & 0.010783588598240176 & 0.3 \\
+Weekdays & 27 & 5 & 8 & 0.04084386509049799 & 0.3 \\
+Weekdays & 28 & 1 & 4 & 0.11855108116108053 & 0.3 \\
+Weekdays & 29 & 10 & 11 & 0.05977798087267876 & 0.3 \\
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[H]
+\centering
+\caption{Saturday Data Skenario Lainnya}
+\label{Saturday Data Skenario Lainnya}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Trip ID} & \textbf{Start Time} & \textbf{End Time} & \textbf{Battery Consumption} & \textbf{Probability} \\
+\hline
+Saturday & 0 & 1 & 3 & 0.0704929393661057 & 0.34 \\
+Saturday & 1 & 11 & 12 & 0.1408308207340015 & 0.34 \\
+Saturday & 2 & 4 & 5 & 0.07657157502211483 & 0.34 \\
+Saturday & 3 & 4 & 5 & 0.0762383045030205 & 0.34 \\
+Saturday & 4 & 7 & 10 & 0.12974420975932455 & 0.34 \\
+Saturday & 5 & 8 & 11 & 0.0900320649903682 & 0.34 \\
+Saturday & 6 & 3 & 6 & 0.014910720550740638 & 0.34 \\
+Saturday & 7 & 11 & 12 & 0.10955778541781142 & 0.34 \\
+Saturday & 8 & 11 & 14 & 0.019547159811202117 & 0.34 \\
+Saturday & 9 & 10 & 11 & 0.0812661837131828 & 0.34 \\
+Saturday & 10 & 9 & 10 & 0.18976945572060308 & 0.34 \\
+Saturday & 11 & 7 & 9 & 0.20400287179010476 & 0.34 \\
+Saturday & 12 & 8 & 11 & 0.11797275813721532 & 0.34 \\
+Saturday & 13 & 2 & 4 & 0.04809157471702315 & 0.34 \\
+Saturday & 14 & 1 & 4 & 0.10891074821327364 & 0.34 \\
+Saturday & 15 & 10 & 12 & 0.023010295084486324 & 0.34 \\
+Saturday & 16 & 7 & 10 & 0.10993672671294834 & 0.34 \\
+Saturday & 17 & 10 & 13 & 0.0604823726783922 & 0.34 \\
+Saturday & 18 & 1 & 2 & 0.18857674489125542 & 0.34 \\
+Saturday & 19 & 1 & 4 & 0.06228447748438064 & 0.34 \\
+Saturday & 20 & 4 & 5 & 0.050296854884397176 & 0.34 \\
+Saturday & 21 & 11 & 12 & 0.11051186098286486 & 0.34 \\
+Saturday & 22 & 0 & 3 & 0.017195518088264857 & 0.34 \\
+Saturday & 23 & 9 & 11 & 0.023689490470052817 & 0.34 \\
+Saturday & 24 & 0 & 3 & 0.11284957581239363 & 0.34 \\
+Saturday & 25 & 8 & 9 & 0.08603452037998166 & 0.34 \\
+Saturday & 26 & 5 & 8 & 0.010175224265666812 & 0.34 \\
+Saturday & 27 & 6 & 8 & 0.055283163869471144 & 0.34 \\
+Saturday & 28 & 9 & 10 & 0.002346555740345217 & 0.34 \\
+Saturday & 29 & 10 & 13 & 0.13178957872592567 & 0.34 \\
+\hline
+\end{tabular}
+\end{table}
+\begin{table}[H]
+\centering
+\caption{Sunday Data Skenario Lainnya}
+\label{Sunday Data Skenario Lainnya}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Scenario} & \textbf{Trip ID} & \textbf{Start Time} & \textbf{End Time} & \textbf{Battery Consumption} & \textbf{Probability} \\
+\hline
+Sunday & 0 & 8 & 11 & 0.11069695699910045 & 0.36 \\
+Sunday & 1 & 5 & 6 & 0.12681471196583274 & 0.36 \\
+Sunday & 2 & 3 & 5 & 0.08151117212498699 & 0.36 \\
+Sunday & 3 & 8 & 9 & 0.0950354466301667 & 0.36 \\
+Sunday & 4 & 4 & 5 & 0.058674640322312115 & 0.36 \\
+Sunday & 5 & 10 & 13 & 0.035824898097683106 & 0.36 \\
+Sunday & 6 & 5 & 8 & 0.09061648088181894 & 0.36 \\
+Sunday & 7 & 5 & 7 & 0.08849772530931686 & 0.36 \\
+Sunday & 8 & 2 & 3 & 0.048885312447122145 & 0.36 \\
+Sunday & 9 & 5 & 6 & 0.060853959747676746 & 0.36 \\
+Sunday & 10 & 6 & 7 & 0.11042185401585164 & 0.36 \\
+Sunday & 11 & 10 & 11 & 0.13271147208429795 & 0.36 \\
+Sunday & 12 & 3 & 4 & 0.09772358246522068 & 0.36 \\
+Sunday & 13 & 3 & 5 & 0.0452649216520342 & 0.36 \\
+Sunday & 14 & 2 & 3 & 0.02348088579620471 & 0.36 \\
+Sunday & 15 & 11 & 14 & 0.11782245056011577 & 0.36 \\
+Sunday & 16 & 3 & 6 & 0.0038417288463018185 & 0.36 \\
+Sunday & 17 & 8 & 11 & 0.02799553068716554 & 0.36 \\
+Sunday & 18 & 1 & 4 & 0.02975269065720625 & 0.36 \\
+Sunday & 19 & 4 & 7 & 0.10138149694701239 & 0.36 \\
+Sunday & 20 & 7 & 9 & 0.009730430740964337 & 0.36 \\
+Sunday & 21 & 8 & 9 & 0.03074333233255257 & 0.36 \\
+Sunday & 22 & 3 & 5 & 0.05669477116352015 & 0.36 \\
+Sunday & 23 & 10 & 13 & 0.12327249182452929 & 0.36 \\
+Sunday & 24 & 1 & 2 & 0.029401556030399765 & 0.36 \\
+Sunday & 25 & 8 & 9 & 0.012037544070469473 & 0.36 \\
+Sunday & 26 & 10 & 11 & 0.07528869871973946 & 0.36 \\
+Sunday & 27 & 3 & 4 & 0.018731418750935168 & 0.36 \\
+Sunday & 28 & 5 & 8 & 0.01597100666376714 & 0.36 \\
+Sunday & 29 & 7 & 8 & 0.20327934160326394 & 0.36 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Trip yang Diterima tiap Skenario}
+\label{Accepted Trip IDs by Scenario}
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Hari Kerja} & \textbf{Sabtu} & \textbf{Minggu} \\
+\hline
+0 & 0 & 0 \\
+1 & 2 & 1 \\
+2 & 3 & 2 \\
+3 & 4 & 4 \\
+4 & 5 & 5 \\
+5 & 6 & 6 \\
+6 & 7 & 7 \\
+7 & 8 & 8 \\
+8 & 9 & 9 \\
+9 & 10 & 10 \\
+10 & 11 & 11 \\
+11 & 12 & 12 \\
+13 & 13 & 13 \\
+14 & 14 & 14 \\
+15 & 15 & 15 \\
+16 & 16 & 16 \\
+17 & 17 & 18 \\
+18 & 18 & 19 \\
+20 & 19 & 20 \\
+21 & 20 & 21 \\
+23 & 21 & 22 \\
+24 & 22 & 23 \\
+25 & 23 & 24 \\
+27 & 24 & 25 \\
+28 & 25 & 27 \\
+ & 26 & 28 \\
+ & 27 & 29 \\
+ & 28 &  \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\chapter{LAMPIRAN PENYELESAIAN SISTEM \textit{ELECTRIC BIKE-SHARING} SEDERHANA DENGAN LINGO}
+
+\begin{verbatim}
+MODEL:
+
+! Objective function;
+MAX = 0.70 * (Z11 + Z21) + 0.30 * (Z12 + Z22);
+
+! Constraints;
+X1 + X2 = 3;
+X1 + W11 >= Z11;
+X2 + W12 >= Z12;
+W11 + W12 = 1;
+Z11 <= 3;
+Z12 <= 1;
+X1 + W21 >= Z21;
+X2 + W22 >= Z22;
+W21 + W22 = 1;
+Z21 <= 1;
+Z22 <= 3;
+
+! Non-negativity constraints;
+@FREE(X1); @FREE(X2);
+@BND(0, W11, 1); @BND(0, W12, 1);
+@BND(0, W21, 1); @BND(0, W22, 1);
+@BND(0, Z11, 3); @BND(0, Z12, 1);
+@BND(0, Z21, 1); @BND(0, Z22, 3);
+
+END
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{LINGO.png}
+    \caption{Hasil Model Sistem \textit{Electric Bike-Sharing} Sederhana}
+    \label{LINGO}
+\end{figure}
+
+\chapter{LAMPIRAN PENYELESAIAN SISTEM \textit{ELECTRIC BIKE-SHARING} SEDERHANA DENGAN \textit{FIRE HAWK OPTIMIZER}}
+\lstset{language=python, frame=single}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
+\lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
+\lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
+\lstinputlisting{skripsi_generating_data.py}
+
+
+\chapter{LAMPIRAN SKRIP PROGRAM GENERATING DATA}
+\lstset{language=python, frame=single}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
+\lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
+\lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
+\lstinputlisting{skripsi_example.py}
+
+\chapter{LAMPIRAN SKRIP PENYELESAIAN ALGORITMA FIRE HAWK OPTIMIZER}
+\lstset{language=python, frame=single}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
+\lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
+\lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
+\lstinputlisting{fork_of_skripsi_v2.py}
+
+%-----------------------------------------------------------------
+%-----------------------------------------------------------------
+\end{document}

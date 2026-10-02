@@ -1,0 +1,107 @@
+\chapter{PENDAHULUAN}
+\pagenumbering{arabic}\setcounter{page}{1}
+
+\section{Latar Belakang Masalah}
+
+Perubahan iklim global telah menjadi isu mendesak karena peningkatan suhu rata-rata bumi yang disebabkan oleh akumulasi gas rumah kaca di atmosfer, sehingga mendorong negara-negara di seluruh dunia untuk mencari solusi yang lebih ramah lingkungan terutama di sektor transportasi, yang menjadi salah satu kontributor utama emisi gas rumah kaca. Intensifikasi penggunaan kendaraan bermotor pribadi telah mengakibatkan peningkatan signifikan emisi CO2, yang berkontribusi langsung pada efek rumah kaca dan pemanasan global. Sebagai bagian dari upaya ini, negara-negara berkomitmen pada Perjanjian Paris untuk membatasi pemanasan global di bawah 2°C (\mycitet{unfccc2015paris}). Sistem \textit{electric bike-sharing} muncul sebagai solusi alternatif transportasi yang rendah emisi, dan fleksibel (\mycitet{fishman2020bikeshare}).
+
+Meskipun sepeda konvensional sudah menawarkan solusi transportasi tanpa emisi, \textit{electric bike-sharing} memberikan keunggulan tambahan dalam hal jangkauan dan aksesibilitas. \mycite{campbell2016electric} menemukan bahwa sepeda listrik lebih disukai untuk perjalanan yang lebih panjang dan oleh pengguna yang mencari pengurangan upaya fisik, terutama di daerah berbukit atau saat cuaca panas. Meskipun produksi listrik masih bertumpu pada pembangkit berbahan bakar fosil, sistem \textit{electric bike-sharing} tetap menawarkan keunggulan dalam efisiensi energi dibandingkan kendaraan konvensional. Konsumsi energi per kilometer \textit{electric bike} hanya sebesar 0,0075 kWh/km dibandingkan mobil listrik yang membutuhkan 0,2 kWh/km. Sistem ini menawarkan peluang untuk mengurangi emisi dari sektor transportasi, yang pada tahun 2020 menyumbang sekitar 24\% dari total emisi CO2 terkait energi di seluruh dunia (\mycitet{iea2021global}). Dibandingkan dengan sistem transportasi massal seperti MRT atau LRT yang membutuhkan infrastruktur besar dan investasi tinggi, \textit{electric bike-sharing} menawarkan solusi yang lebih adaptif dan cepat diimplementasikan, terutama untuk perjalanan jarak pendek hingga menengah dalam kawasan bersejarah dan padat penduduk. Sistem ini juga dapat berperan sebagai penghubung "\textit{first-mile}" dan "\textit{last-mile}" yang melengkapi, bukan menggantikan, sistem transportasi massal yang ada, sekaligus mendukung tujuan mobilitas berkelanjutan yang tertuang dalam Sustainable Development Goals (SDGs) (\mycitet{un2015transforming}).
+
+Di Indonesia, Yogyakarta—sebuah kota yang dikenal sebagai pusat budaya dan pendidikan—memiliki potensi besar untuk mengadopsi sistem \textit{electric bike-sharing} guna mendukung pariwisata, salah satu sektor ekonomi utamanya. Pada tahun 2019, lebih dari 3,7 juta wisatawan mengunjungi Yogyakarta (\mycitet{bps2020yogyakarta}), menciptakan tantangan bagi pemerintah kota untuk menyediakan transportasi yang efisien dan ramah lingkungan. Sistem \textit{electric bike-sharing} dapat menjadi solusi untuk memudahkan mobilitas wisatawan di antara destinasi budaya dan sejarah yang tersebar di kota, seperti Keraton Yogyakarta, Candi Prambanan, dan Malioboro, sambil mengurangi dampak negatif terhadap lingkungan. Selain itu, penerapan sistem ini sejalan dengan visi Yogyakarta untuk menjadi kota cerdas dan berkelanjutan (\mycitet{pemkot2020yogyakarta}), yang tidak hanya dapat meningkatkan daya tarik kota sebagai destinasi wisata ramah lingkungan, tetapi juga mendukung pertumbuhan ekonomi lokal melalui pariwisata berkelanjutan.
+
+Namun, keberhasilan implementasi sistem \textit{electric bike-sharing} sangat tergantung pada infrastruktur yang memadai, termasuk stasiun peminjaman sepeda dan fasilitas pengisian daya. Optimalisasi lokasi stasiun, jumlah sepeda listrik, serta rute-rute yang menguntungkan menjadi tantangan krusial yang harus dipertimbangkan. Tantangan ini diperparah oleh variasi permintaan, batasan anggaran, dan kendala operasional. Oleh karena itu, pendekatan optimasi yang efektif diperlukan untuk memaksimalkan cakupan layanan dan efisiensi sistem, sambil meminimalkan biaya investasi dan operasional. Kompleksitas masalah ini semakin meningkat ketika mempertimbangkan sifat stokastik dari permintaan dan variabel operasional lainnya. 
+
+Pendekatan pemodelan stokastik dua tahap menjadi relevan dalam konteks ini, di mana keputusan strategis jangka panjang, seperti penentuan lokasi stasiun, dilakukan pada tahap pertama, sementara keputusan operasional, seperti realokasi sepeda, dapat disesuaikan di tahap kedua berdasarkan kondisi permintaan aktual \mycitet{powell2019unified}. Untuk menyelesaikan masalah optimasi yang kompleks ini, penelitian ini mengusulkan penggunaan algoritma \textit{fire hawk optimizer} (FHO), sebuah metode metaheuristik yang terinspirasi dari perilaku elang api dalam berburu dengan menyebarkan api \mycitet{azizi2023fire}. FHO telah menunjukkan kinerja yang baik dalam menyelesaikan masalah optimasi dengan ruang pencarian yang besar dan banyak kendala, seperti yang dihadapi dalam optimasi sistem \textit{electric bike-sharing}.
+
+Penelitian ini bertujuan untuk memperoleh model optimasi penentuan lokasi stasiun pengisian dalam sistem \textit{electric bike-sharing} yang mampu mengakomodasi karakteristik multi-charging dan waktu pengisian singkat yang tidak terdapat dalam model \mycite{brandstatter2017determining} untuk sistem \textit{car-sharing} listrik. Pengembangan model dilakukan dengan memodifikasi asumsi kapasitas pengisian daya yang memungkinkan setiap stasiun melayani banyak sepeda listrik per hari \mycitet{chen2020electric}, serta menyesuaikan kendala dan parameter untuk karakteristik khusus sistem \textit{electric bike-sharing}. Dengan mempertimbangkan ketidakpastian permintaan dan kendala operasional, model yang dikembangkan mengintegrasikan pemodelan stokastik dua tahap dan algoritma FHO untuk menghasilkan solusi yang tidak hanya optimal secara teoritis, tetapi juga adaptif dan aplikatif dalam menghadapi dinamika sistem di dunia nyata. Kontribusi dari penelitian ini tidak hanya akan membantu perencanaan dan implementasi sistem berbagi sepeda listrik yang lebih efisien dan berkelanjutan, tetapi juga dapat menjadi kerangka kerja yang dapat diterapkan pada sistem transportasi perkotaan lainnya yang menghadapi ketidakpastian serupa.
+
+\section{Tujuan dan Manfaat Penelitian}
+
+Penelitian ini memiliki beberapa tujuan utama:
+\begin{enumerate}
+    \item Memperoleh model optimisasi stokastik dua tahap yang mampu merepresentasikan ketidakpastian permintaan dalam sistem \textit{electric bike-sharing}.
+    \item Mendapatkan solusi optimal untuk penempatan stasiun, alokasi sepeda, dan penerimaan trip dalam sistem \textit{electric bike-sharing} di Yogyakarta menggunakan algoritma \textit{fire hawk optimizer} (\mycitet{azizi2023fire}).
+\end{enumerate}
+
+Penelitian ini diharapkan memberikan beberapa manfaat penting diantaranya:
+\begin{enumerate}
+    \item Kontribusi teoritis dalam pengembangan model stokastik untuk sistem transportasi perkotaan untuk pemangku kepentingan seperti pemerintah daerah.
+    \item Panduan bagi perencana kota dan operator sistem \textit{bike-sharing} dalam mengoptimalkan penempatan stasiun pengisian daya dan meningkatkan aksesibilitas sistem \textit{electric bike-sharing} bagi pengguna (\mycitet{fishman2020bikeshare}).
+    \item Kontribusi pada pengembangan solusi transportasi perkotaan yang lebih berkelanjutan dan ramah lingkungan.
+\end{enumerate}
+
+\section{Tinjauan Pustaka}
+
+Penelitian ini dibangun di atas beberapa aliran literatur yang saling terkait, mencakup sistem \textit{electric bike-sharing}, optimisasi lokasi stasiun, pemodelan stokastik, dan algoritma optimisasi. \mycite{obrien2014mining} menggarisbawahi pentingnya analisis data dalam mengembangkan sistem transportasi berkelanjutan, sementara \mycite{fishman2020bikeshare} memberikan tinjauan komprehensif tentang perkembangan terbaru dalam sistem \textit{bike-sharing}, termasuk tren elektrifikasi yang menunjukkan potensi untuk memperluas jangkauan perjalanan dan meningkatkan aksesibilitas.
+
+Dalam kebijakan dan dampak lingkungan, penelitian ini sejalan dengan komitmen internasional yang tercantum dalam \mycite{unfccc2015paris} dan agenda pembangunan berkelanjutan \mycite{un2015transforming}. \mycite{iea2021global} menunjukkan bahwa elektrifikasi transportasi menjadi tren global, dengan \mycite{roadcc2021} memberikan perspektif tentang perkembangan regulasi terkini. Di tingkat lokal, \mycite{bps2020yogyakarta} dan \mycite{pemkot2020yogyakarta} menyediakan kerangka kebijakan untuk implementasi sistem transportasi berkelanjutan.
+
+Beberapa studi telah menganalisis perilaku pengguna dan preferensi moda transportasi. \mycite{campbell2016electric} meneliti faktor-faktor yang mempengaruhi pilihan antara sepeda konvensional dan sepeda listrik di Beijing, menemukan bahwa sepeda listrik lebih disukai untuk perjalanan jarak jauh. \mycite{ling2017emerging} mempelajari transisi dari pengguna \textit{e-bike} ke pengguna mobil di Cina, sementara \mycite{shaheen2019sharing} memberikan perspektif komprehensif tentang strategi berbagi dalam berbagai moda transportasi mikro. \mycite{langford2013comparing} dan \mycite{fyhri2017effect} menganalisis dampak kesehatan dan perilaku penggunaan, menunjukkan bahwa \textit{e-bikes} dapat meningkatkan frekuensi bersepeda terutama di daerah berbukit.
+
+Optimisasi lokasi stasiun merupakan aspek krusial yang telah mendapat perhatian signifikan dalam literatur. \mycite{brandstatter2017determining} mengembangkan model stokastik untuk sistem \textit{car-sharing} dengan asumsi satu stasiun hanya dapat melayani satu kendaraan dalam satu periode waktu. Model yang dikembangkan dalam penelitian ini memperluas pendekatan tersebut dengan mengadaptasi konsep \textit{multi-charging capability} dari \mycite{chen2020electric} yang memungkinkan satu stasiun melayani beberapa sepeda secara simultan. \mycite{zhu2016charging} memberikan kerangka dasar untuk masalah lokasi stasiun pengisian yang dapat diadaptasi untuk sepeda listrik. \mycite{sun2018data} menekankan pentingnya faktor lingkungan dalam penentuan lokasi stasiun, sedangkan \mycite{ma2020electric} menunjukkan dampak penempatan stasiun terhadap pergeseran moda transportasi.
+
+Fondasi teoritis untuk optimisasi stokastik dan pemodelan sistem dibangun dari berbagai sumber. \mycite{birge2011introduction} dan \mycite{powell2019unified} menyediakan kerangka kerja untuk program stokastik, sementara \mycite{wilson1996introduction} memberikan dasar teori graf untuk pemodelan jaringan. \mycite{billingsley1995probability}, \mycite{ross2014introduction}, dan \mycite{grimmett2020probability} menyediakan landasan probabilitas dan proses stokastik. \mycite{haight1967handbook} dan \mycite{casella2002statistical} memberikan dasar statistik untuk analisis data.
+
+Aspek komputasi dan algoritma optimisasi mendapat dukungan dari beberapa literatur kunci. \mycite{boyd2004convex} dan \mycite{nocedal2006numerical} menyediakan dasar optimisasi numerik, sedangkan \mycite{winston2004operations} dan \mycite{hastie2009elements} memberikan kerangka analisis operasional. \mycite{talbi2009metaheuristics} dan \mycite{glover1986future} membahas pendekatan metaheuristik, yang menjadi dasar pengembangan algoritma modern seperti Fire Hawk Optimizer oleh \mycite{azizi2023fire}. Implementasi komputasional didukung oleh \mycite{mckinney2011pandas} untuk analisis data dan \mycite{hunter2007matplotlib} untuk visualisasi.
+
+Dari perspektif industri dan implementasi, laporan \mycite{bikeplus2016shared} tentang program \textit{electric bike-sharing} memberikan wawasan praktis tentang tantangan dan peluang dalam pengembangan sistem operasional. \mycite{holland1992adaptation} memberikan kerangka kerja adaptif yang dapat diterapkan dalam optimisasi sistem dinamis seperti \textit{bike-sharing}, sementara \mycite{ross1996stochastic} menyediakan dasar untuk pemodelan proses stokastik dalam sistem transportasi.
+
+Meskipun literatur yang ada memberikan dasar yang kuat untuk pemahaman tentang \textit{electric bike-sharing}, masih terdapat beberapa kesenjangan penelitian yang signifikan karena mayoritas penelitian sebelumnya fokus pada sistem \textit{bike-sharing} konvensional atau adaptasi langsung dari model \textit{car-sharing} listrik yang memiliki karakteristik operasional berbeda.
+
+Selain itu, penggunaan algoritma \textit{fire hawk optimizer} yang baru diperkenalkan oleh \mycite{azizi2023fire} dalam optimisasi sistem transportasi masih sangat terbatas. Meskipun algoritma ini menunjukkan performa yang menjanjikan dalam masalah optimisasi kompleks, implementasinya dalam optimisasi sistem \textit{electric bike-sharing} belum pernah dilakukan sebelumnya. Penelitian ini bertujuan untuk mengisi kesenjangan tersebut dengan mengembangkan model stokastik yang secara spesifik disesuaikan untuk karakteristik \textit{electric bike-sharing} dan menjadi yang pertama dalam mengaplikasikan algoritma \textit{fire hawk optimizer} untuk optimisasi lokasi stasiun dalam konteks ini.
+
+\section{Metodologi Penelitian}
+Penelitian ini mengadopsi pendekatan multi-fase yang menggabungkan analisis teoretis, pemodelan matematis, dan simulasi komputasi. Metodologi penelitian terdiri dari beberapa fase utama:
+\begin{enumerate}
+    \item Pengembangan Model Stokastik Dua Tahap.
+    \begin{enumerate}
+        \item Memperluas model \mycite{zhu2016charging} dengan menambahkan komponen ketidakpastian permintaan berdasarkan variasi hari (kerja, Sabtu, Minggu) dan mempertimbangkan karakteristik khusus sepeda listrik seperti waktu pengisian daya dan kapasitas baterai yang berbeda dari kendaraan listrik lainnya.
+        \item Menyesuaikan asumsi kapasitas pengisian daya dari model \mycite{chen2020electric} untuk mengakomodasi karakteristik stasiun pengisian sepeda listrik yang dapat melayani \textit{multiple charging} secara simultan, berbeda dengan sistem \textit{car-sharing} yang umumnya terbatas pada \textit{single charging}. 
+    
+        \item Mengonstruksi model dengan mempertimbangkan kondisi nyata seperti batasan jarak antar stasiun, karakteristik geografis Yogyakarta, dan pola pergerakan wisatawan.
+    \end{enumerate}
+    
+    \item Implementasi algoritma \textit{fire hawk optimizer} (FHO). \\ Algoritma FHO dipilih karena kemampuannya dalam mencari solusi optimal pada permasalahan dengan dimensi tinggi dan banyak kendala, serta efektivitasnya dalam menemukan solusi global optimal dibandingkan algoritma metaheuristik lainnya (\mycite{azizi2023fire}). FHO juga menunjukkan performa yang baik dalam menghindari \textit{local optima} dan konvergensi prematur.
+    
+    \item Memodelkan sistem \textit{electric bike-sharing}.
+    
+    \item Implementasi dan Simulasi Komputasi.
+    \begin{enumerate}
+        \item Python dipilih sebagai bahasa pemrograman karena bersifat open source serta karena kemampuannya dalam pemrosesan data yang kompleks dan tersedianya berbagai library pendukung untuk optimisasi.
+        
+        \item NumPy, SciPy, dan Pandas (\mycite{mckinney2011pandas}) digunakan untuk manipulasi data dan komputasi numerik yang efisien, terutama dalam penanganan matriks besar dan operasi matematika yang dibutuhkan dalam algoritma optimisasi.
+        
+        \item Matplotlib (\mycite{hunter2007matplotlib}) dan Folium dipilih untuk visualisasi karena kemampuannya dalam menghasilkan grafik berkualitas tinggi dan peta interaktif yang memudahkan analisis hasil optimisasi lokasi stasiun.
+    \end{enumerate}
+    
+    % \item Validasi Model dan Analisis Hasil
+    % \begin{enumerate}
+    %     \item Melakukan validasi model menggunakan data historis dan/atau studi kasus dari sistem \textit{bike-sharing} yang ada (\mycite{obrien2014mining}).
+    %     \item Melaksanakan multiple runs dengan parameter yang bervariasi untuk memastikan robustness hasil.
+    %     \item Menerapkan analisis statistik untuk menginterpretasikan hasil.
+    %     \item Melakukan validasi silang untuk mengevaluasi generalisasi model pada dataset yang berbeda (\mycite{hastie2009elements}).
+    % \end{enumerate}
+    
+    % \item Analisis dan Interpretasi Hasil Akhir
+    % \begin{enumerate}
+    %     \item Menganalisis trade-off antara berbagai faktor dalam desain sistem, seperti cakupan layanan, biaya infrastruktur, dan efisiensi operasional (\mycite{caggiani2022real}).
+    %     \item Menyusun wawasan praktis dan rekomendasi untuk implementasi sistem \textit{electric bike-sharing}.
+    %     \item Mengidentifikasi implikasi teoretis dan praktis dari hasil penelitian.
+    % \end{enumerate}
+\end{enumerate}
+Metodologi ini dirancang untuk menghasilkan model optimisasi yang robust untuk penentuan lokasi stasiun pengisian daya \textit{electric bike-sharing}, serta memberikan wawasan praktis yang berharga untuk pengembangan dan pengelolaan sistem tersebut.
+
+\section{Sistematika Penulisan}
+Sistematika penulisan skripsi ini terdiri dari lima bab utama yang disusun sebagai berikut:
+\begin{enumerate}
+    \item \textbf{BAB I PENDAHULUAN}\\
+    Bab ini berisi gambaran umum tentang penelitian, meliputi latar belakang masalah, rumusan masalah, tujuan dan manfaat penelitian, tinjauan pustaka, dan sistematika penulisan.
+    \item \textbf{BAB II DASAR TEORI}\\
+    Pada bab ini disajikan landasan teoritis yang digunakan dalam penelitian. Topik-topik yang dibahas meliputi konsep \textit{\textit{electric bike-sharing}}, graf, proses stokastik, dan algoritma heuristik.
+    \item \textbf{BAB III OPTIMISASI STOKASTIK}\\
+    Pada bab ini dijelaskan pendekatan penelitian yang digunakan, termasuk pengembangan model stokastik dua tahap, implementasi algoritma \textit{fire hawk optimizer}, pengembangan skenario uji, dan metode validasi model.
+    \item \textbf{BAB IV SIMULASI}\\
+    Pada bab ini akan dibahas mengenai pembentukan model, termasuk asumsi dan notasi, fungsi tujuan, serta kendala. Bab ini juga menyajikan hasil simulasi numerik menggunakan algoritma\textit{ fire hawk optimizer}, disertai dengan analisis dan interpretasi hasil.
+    \item \textbf{BAB V PENUTUP}\\
+    Bab ini berisi kesimpulan dari penelitian yang telah dilakukan, serta saran untuk penelitian selanjutnya dalam bidang optimisasi sistem \textit{\textit{electric bike-sharing}}.
+\end{enumerate}
