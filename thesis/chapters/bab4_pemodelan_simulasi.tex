@@ -1,6 +1,6 @@
 \chapter{SISTEM \textit{ELECTRIC BIKE-SHARING} DI KOTA YOGYAKARTA}
 
-Dalam bab ini akan dibahas pembentukan model sistem \textit{electric bike-sharing} mulai dari asumi-asumsi, notasi, fungsi tujuan, serta kendala. Permasalahan utama dalam masalah optimalisasi ini yaitu memaksimalkan keuntungan berdasarkan pemilihan stasiun peminjaman, trip yang diterima, dan jumlah sepeda listrik yang perlu dibeli. Permasalahan ini akan dimodelkan menggunakan model \textit{two-stage stochastic} dengan kendala pada tahap pertama terfokus pada perencanaan jangka panjang yaitu lokasi stasiun dan kapasistas sistem (sepeda dan pengisian daya) dan kendala pada tahap kedua berkaitan dengan operasi harian sistem. Model \textit{two-stage stochastic} yang disusun ini akan diselesaikan dengan algortima \textit{fire-hawk optimizer}.
+Dalam bab ini akan dibahas pembentukan model sistem \textit{electric bike-sharing} mulai dari asumsi-asumsi, notasi, fungsi tujuan, serta kendala. Permasalahan utama dalam masalah optimalisasi ini yaitu memaksimalkan keuntungan berdasarkan pemilihan stasiun peminjaman, trip yang diterima, dan jumlah sepeda listrik yang perlu dibeli. Permasalahan ini akan dimodelkan menggunakan model \textit{two-stage stochastic} dengan kendala pada tahap pertama terfokus pada perencanaan jangka panjang yaitu lokasi stasiun dan kapasitas sistem (sepeda dan pengisian daya) dan kendala pada tahap kedua berkaitan dengan operasi harian sistem. Model \textit{two-stage stochastic} yang disusun ini akan diselesaikan dengan algoritma \textit{Fire Hawk Optimizer}.
 
 Dalam studi kasus ini, lokasi sistem \textit{electric bike-sharing} yang digunakan dalam simulasi berlokasi di Yogyakarta dengan Tugu Yogyakarta sebagai titik tengah sistem. Selain itu skenario yang digunakan meliputi hari kerja (\textit{weekdays}), Sabtu (\textit{Saturday}), dan Minggu (\textit{Sunday}), dengan probabilitas skenario Minggu yang paling besar, diikuti Sabtu, kemudian hari kerja memiliki probabilitas paling kecil. 
 
@@ -48,7 +48,7 @@ Model yang dikembangkan mengintegrasikan beberapa komponen penting meliputi:
 \begin{enumerate}
     \item \textbf{Representasi Jaringan}\\ Dalam hal ini digunakan graf berbobot untuk merepresentasikan jaringan stasiun dan rute perjalanan.
     \item \textbf{Pemodelan Permintaan}\\ Pendekatan berbasis skenario akan diadopsi untuk menangkap variabilitas permintaan.
-    \item \textbf{Dinamika Sistem}\\ Graf lokasi \textit{time-expanded} digunakan untuk memodelkan pergerakan sepeda, status pengisian daya, dan alokasi trip dengan setiap titik merepresentasikan kombinasi lokasi stasiun dan waktu diskrit, sementara \textit{arc} menggambarkan aktivitas seperti pengisian daya (\textit{waiting arc}), perjalanan (\textit{travel ar}c), serta penempatan awal dan akhir sepeda.
+    \item \textbf{Dinamika Sistem}\\ Graf lokasi \textit{time-expanded} digunakan untuk memodelkan pergerakan sepeda, status pengisian daya, dan alokasi trip dengan setiap titik merepresentasikan kombinasi lokasi stasiun dan waktu diskrit, sementara \textit{arc} menggambarkan aktivitas seperti pengisian daya (\textit{waiting arc}), perjalanan (\textit{travel arc}), serta penempatan awal dan akhir sepeda.
     \item \textbf{Kendala Anggaran dan Operasional}\\ Batasan finansial dan teknis akan dipertimbangkan dalam pengambilan keputusan.
 \end{enumerate}
 
@@ -96,7 +96,7 @@ Himpunan dan Indeks & $\Omega$ & Himpunan skenario \\
 &$K^\omega$ & Himpunan perjalanan dalam skenario $\omega$ \\
 & S & Jumlah stasiun potensial\\
 & H & Inisial jumlah sepeda yang akan dibeli \\
-& T & Periode perencanaan \\\
+& T & Periode perencanaan \\
 & $i, j \in S$ & Lokasi potensial stasiun \\
 & $t \in T$ & Periode waktu, $T = \{0, \ldots, T_{\text{max}}\}$ \\
 & $h \in H$ & Himpunan sepeda, $H = \{1, \ldots, H_{\text{max}}\}$ \\
@@ -279,9 +279,9 @@ f_a^{h,\omega} &\in (0,1) \quad \forall h \in H, \forall \omega \in \Omega, \for
 
 \section{Simulasi}
 
-Selanjutnya akan dibahas penyelesaian masalah two-stage stochastic untuk memaksimalkan profit dari sistem \textit{bike-sharing} berbasis stasiun. Masalah optimisasi ini melibatkan lokasi serta biaya pembangunan stasiun yang optimal, trip yang diterima beserta profit kontribusi tiap tripnya, dan juga jumlah dan harga sepeda yang akan dibeli. Penyelesaian model ini akan menggunakan algoritma metaheuristik yaitu \textit{Fire Hawk Optimizer}.
+Selanjutnya akan dibahas penyelesaian masalah \textit{two-stage stochastic} untuk memaksimalkan profit dari sistem \textit{bike-sharing} berbasis stasiun. Masalah optimisasi ini melibatkan lokasi serta biaya pembangunan stasiun yang optimal, trip yang diterima beserta profit kontribusi tiap tripnya, dan juga jumlah dan harga sepeda yang akan dibeli. Penyelesaian model ini akan menggunakan algoritma metaheuristik yaitu \textit{Fire Hawk Optimizer}.
 
-Selanjutnya wilayah yang digunakan dalam simulasi berlokasi di Yogyakarta dengan pusat lokasi beradi di Tugu Yogyakarta. Lokasi potensial untuk pembangunan stasiun dan juga trip-trip tiap skenario di-\textit{generate} secara acak. Kemudian, biaya pembangunan stasiun, profit kontribusi, dan juga harga sepeda tidak menggunakan mata uang khusus tapi di-\textit{generate} semasuk akal mungkin seperti harga sepeda dan pembangunan stasiun yang terlampau tinggi selisihnya.
+Selanjutnya wilayah yang digunakan dalam simulasi berlokasi di Yogyakarta dengan pusat lokasi berada di Tugu Yogyakarta. Lokasi potensial untuk pembangunan stasiun dan juga trip-trip tiap skenario di-\textit{generate} secara acak. Kemudian, biaya pembangunan stasiun, profit kontribusi, dan juga harga sepeda tidak menggunakan mata uang khusus tapi di-\textit{generate} semasuk akal mungkin seperti harga sepeda dan pembangunan stasiun yang terlampau tinggi selisihnya.
 
 \subsection{Generating Data}
 Untuk mensimulasikan sistem \textit{electric bike-sharing} di Yogyakarta, digunakan data yang dihasilkan secara acak dengan beberapa parameter dan batasan yang realistis. Berikut adalah rincian data yang dihasilkan.
@@ -345,7 +345,7 @@ dengan
     \item $X_i$ merepresentasikan kandidat solusi ke $i$ di ruang pencarian,
     \item $d$ merepresentasikan dimensi dari permasalahan (misalnya, jumlah lokasi potensial stasiun plus jumlah sepeda yang dapat dialokasikan),
     \item $N$ adalah jumlah total kandidat solusi di ruang pencarian,
-    \item $x_i^j$ adalah variabel keputusan ke $j$ dari kandidat solusi ke $i$ (misalnya, keputusan untuk membangun stasiun di lokasi tertentu atau .jumlah sepeda yang dialokasikan),
+    \item $x_i^j$ adalah variabel keputusan ke $j$ dari kandidat solusi ke $i$ (misalnya, keputusan untuk membangun stasiun di lokasi tertentu atau jumlah sepeda yang dialokasikan),
     \item $x_i^j(0)$ merepresentasikan posisi awal dari kandidat solusi,
     \item $x_{i,\text{min}}^j$ dan $x_{i,\text{max}}^j$ adalah batas bawah dan batas atas dari variabel keputusan ke $j$ untuk kandidat solusi ke $i$,
     \item rand adalah bilangan acak yang terdistribusi seragam dalam rentang [0,1], dan
@@ -357,7 +357,7 @@ Fungsi objektif ini merepresentasikan total profit yang diharapkan dari operasi 
 
 Beberapa kandidat solusi dengan nilai fungsi objektif terbaik direpresentasikan sebagai elang api, sedangkan kandidat solusi lain dianggap sebagai mangsa. Elang api yang dipilih dimanfaatkan untuk menyebarkan api di sekitar mangsa di ruang pencarian untuk memudahkan perburuan. Hal ini dapat diinterpretasikan sebagai eksplorasi area di sekitar solusi-solusi terbaik untuk menemukan konfigurasi sistem \textit{electric bike-sharing} yang lebih optimal.\\
 
-Solusi terbaik global diasumsikan sebagai api utama yang pertama kali dimanfaatkan oleh elang api untuk menyebarkan api di ruang pencarian. Ini merepresentasikan konfigurasi terbaik sistem \textit{electric bike-sharing} yang ditemukan sejauh ini. Solusi-solusi yang direpresentasikan sebagai elang api dan mangsa dinyatakan dinyatakan sebagai berikut.
+Solusi terbaik global diasumsikan sebagai api utama yang pertama kali dimanfaatkan oleh elang api untuk menyebarkan api di ruang pencarian. Ini merepresentasikan konfigurasi terbaik sistem \textit{electric bike-sharing} yang ditemukan sejauh ini. Solusi-solusi yang direpresentasikan sebagai elang api dan mangsa dinyatakan sebagai berikut.
 \begin{align}
     PR = \begin{bmatrix}
         PR_1\\
@@ -412,7 +412,7 @@ Elang api mengumpulkan kayu yang terbakar dari api utama untuk memantik api di a
 \end{align}
 dengan
 \begin{enumerate}
-    \item notasi $FH_l^{\textit{new}}$ adalah new vektor posisi dari elang api ($FH_l$) ke-$l$, merepresentasikan solusi baru untuk konfigurasi sistem \textit{electric bike-sharing},
+    \item notasi $FH_l^{\textit{new}}$ adalah vektor posisi baru dari elang api ($FH_l$) ke-$l$, merepresentasikan solusi baru untuk konfigurasi sistem \textit{electric bike-sharing},
     \item notasi $GB$ adalah solusi terbaik global di ruang pencarian yang dianggap sebagai api utama, merepresentasikan konfigurasi terbaik sistem yang ditemukan sejauh ini,
     \item notasi $FH_{\textit{near}}$ adalah salah satu elang api lain di ruang pencarian, merepresentasikan solusi terbaik lainnya, dan
     \item notasi $r_1$ dan $r_2$ adalah angka acak yang terdistribusi seragam dalam rentang $(0,1)$.
@@ -440,7 +440,7 @@ dengan
 \subsection{Tempat Aman}
 Tempat aman adalah lokasi di mana sebagian besar hewan berkumpul untuk tempat berlindung dari ancaman. Dalam optimisasi, hal ini merepresentasikan area di ruang solusi yang cenderung menghasilkan solusi yang baik. $SP_l$ dan $SP$ diformulasikan sebagai berikut:
 \begin{align}
-    \text{SP}_1 &= \frac{\sum_{q=1}^r \text{PR}_q}{r}, \quad l = 1, 2, \ldots, n,  \text{ dan } q = 1, 2, \ldots, r,
+    \text{SP}_l &= \frac{\sum_{q=1}^r \text{PR}_q}{r}, \quad l = 1, 2, \ldots, n,  \text{ dan } q = 1, 2, \ldots, r,
 \end{align}
 dan
 \begin{align}
@@ -461,7 +461,7 @@ Simulasi \textit{Fire Hawk Optimizer} terhadap formulasi yang telah dipaparkan d
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.45]{__results___0_1.png}
-    \caption{Iterasi Algoritma Elang Api Optimizer}
+    \caption{Iterasi Algoritma \textit{Fire Hawk Optimizer}}
     \label{Iterasi Algoritma Fire Hawk Optimizer}
 \end{figure}
 Algoritma \textit{Fire Hawk Optimizer} melakukan proses iterasi untuk terus memperbaiki solusi seperti yang terlihat pada Gambar \ref{Iterasi Algoritma Fire Hawk Optimizer}. Pada setiap iterasi:
@@ -492,7 +492,7 @@ Simulasi dilakukan dengan menggunakan \textit{Python}  dan diperoleh solusi opti
 
 \subsubsection*{Variabel dan Hasil}
 \begin{enumerate}
-\item \textbf{Stasiun yang Dibangun ((y))}\
+\item \textbf{Stasiun yang Dibangun (\(y\))}\\
 Solusi optimal menunjukkan bahwa dari 15 lokasi potensial, 12 stasiun dipilih untuk dibangun, yaitu stasiun [1, 2, 3, 6, 7, 8, 9, 10, 11, 12, 13, 14]. Lokasi-lokasi ini meliputi (tidak dalam urutan).
 \begin{enumerate}
 \item Sidomoyo,
@@ -515,7 +515,7 @@ Model merekomendasikan pembelian 55 sepeda listrik. Jumlah ini mewakili keseimba
 \begin{tabular}{llcl}\hspace{-0.3em}
     (a) & \hspace{-0.5em}Sidomoyo &: & 8 sepeda, \\
     (b) & \hspace{-0.5em}Monjali &: & 1 sepeda,\\
-    (c) & \hspace{-0.5em}Ketungan &: & 2 sepeda,\\
+    (c) & \hspace{-0.5em}Kentungan &: & 2 sepeda,\\
     (d) & \hspace{-0.5em}Seturan &: & 7 sepeda,\\
     (e) & \hspace{-0.5em}Tugu &: & 4  sepeda,\\
     (f) & \hspace{-0.5em}Cik di Tiro &: & 5 sepeda,\\
