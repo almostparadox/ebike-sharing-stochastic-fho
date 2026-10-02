@@ -1,0 +1,17 @@
+{
+  "num_stations": 15,
+  "budget_fraction": 0.8,
+  "bike_cost": 4000000.0,
+  "charging_time": 4,
+  "max_trip_duration": 3,
+  "max_battery_distance": 20.0,
+  "scenario_probabilities": [
+    0.2,
+    0.3,
+    0.5
+  ],
+  "t_max": 15,
+  "trip_profit_multiplier": 10000000.0,
+  "max_walking_time": 10.0,
+  "walking_speed_kmph": 5.0
+}
