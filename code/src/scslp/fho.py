@@ -25,23 +25,81 @@ class FireHawkOptimizer:
         self.config = config
         self.rng = np.random.default_rng(config.random_seed)
 
+    def _repair(self, sol: np.ndarray) -> np.ndarray:
+        """Repair discrete solution to satisfy station, capacity, and route constraints."""
+        s = sol.copy()
+        y = s[: self.problem.num_stations]
+        if np.sum(y) == 0:
+            y[self.rng.integers(0, self.problem.num_stations)] = 1
+            s[: self.problem.num_stations] = y
+
+        open_cap = int(np.dot(self.problem.capacities, y))
+        b = s[self.problem.dim_y : self.problem.dim_y + self.problem.dim_b]
+        bike_indices = np.where(b == 1)[0]
+        if len(bike_indices) > open_cap:
+            drop = self.rng.choice(
+                bike_indices, size=len(bike_indices) - open_cap, replace=False
+            )
+            b[drop] = 0
+            s[self.problem.dim_y : self.problem.dim_y + self.problem.dim_b] = b
+
+        x = s[self.problem.dim_y + self.problem.dim_b :].reshape(
+            self.problem.num_scenarios, self.problem.max_trips
+        )
+        for sc in range(self.problem.num_scenarios):
+            origs = self.problem.scenario_trip_origins[sc]
+            dests = self.problem.scenario_trip_destinations[sc]
+            num_t = min(len(origs), self.problem.max_trips)
+            for t in range(num_t):
+                if y[origs[t]] == 0 or y[dests[t]] == 0:
+                    x[sc, t] = 0
+                elif x[sc, t] == 0 and self.rng.random() < 0.6:
+                    x[sc, t] = 1
+        s[self.problem.dim_y + self.problem.dim_b :] = x.flatten()
+        return s
+
     def _initialize_population(self) -> np.ndarray:
         """Create initial binary population with repair for station openings."""
-        pop = self.rng.integers(0, 2, size=(self.config.pop_size, self.problem.dimension))
-        for i in range(self.config.pop_size):
-            # Ensure at least 1 station is open
-            if np.sum(pop[i, :self.problem.num_stations]) == 0:
-                random_st = self.rng.integers(0, self.problem.num_stations)
-                pop[i, random_st] = 1
-        return pop
+        pop = []
+        for _ in range(self.config.pop_size):
+            ind = np.zeros(self.problem.dimension, dtype=int)
+            k_st = self.rng.integers(8, self.problem.num_stations + 1)
+            open_sts = self.rng.choice(
+                self.problem.num_stations, size=k_st, replace=False
+            )
+            ind[open_sts] = 1
+            open_cap = int(
+                np.dot(self.problem.capacities, ind[: self.problem.num_stations])
+            )
+            n_bikes = min(
+                open_cap, self.rng.integers(20, min(56, open_cap + 1))
+            )
+            ind[self.problem.dim_y : self.problem.dim_y + n_bikes] = 1
+            x = ind[self.problem.dim_y + self.problem.dim_b :].reshape(
+                self.problem.num_scenarios, self.problem.max_trips
+            )
+            for sc in range(self.problem.num_scenarios):
+                origs = self.problem.scenario_trip_origins[sc]
+                dests = self.problem.scenario_trip_destinations[sc]
+                num_t = min(len(origs), self.problem.max_trips)
+                for t in range(num_t):
+                    if (
+                        ind[origs[t]] == 1
+                        and ind[dests[t]] == 1
+                        and self.rng.random() < 0.8
+                    ):
+                        x[sc, t] = 1
+            ind[self.problem.dim_y + self.problem.dim_b :] = x.flatten()
+            pop.append(self._repair(ind))
+        return np.array(pop)
 
     def _discretize(self, continuous_vector: np.ndarray) -> np.ndarray:
         """Sigmoid / threshold binarization for discrete variable updates."""
         prob = 1.0 / (1.0 + np.exp(-np.clip(continuous_vector, -10.0, 10.0)))
-        binary = (self.rng.random(size=continuous_vector.shape) < prob).astype(int)
-        if np.sum(binary[:self.problem.num_stations]) == 0:
-            binary[self.rng.integers(0, self.problem.num_stations)] = 1
-        return binary
+        binary = (self.rng.random(size=continuous_vector.shape) < prob).astype(
+            int
+        )
+        return self._repair(binary)
 
     def optimize(self) -> FHOResult:
         """Execute Fire Hawk Optimizer iterations."""
