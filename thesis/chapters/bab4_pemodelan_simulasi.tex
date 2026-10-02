@@ -182,12 +182,12 @@ Dalam subbab ini akan diformulasikan masalah program linear bilangan bulat stoka
         \begin{equation}
         \sum_{i \in S} F_i y_i + \sum_{h \in H} F_{\text{bike}} z_h \leq W,
         \end{equation}
-        Kendala ini memastikan total biaya pembangunan stasiun ($F_i y_i$) dan pembelian sepeda ($F_{\text{bike}} z_h$) tidak melebihi budget yang tersedia $W$.\\
+        Kendala ini memastikan total biaya pembangunan stasiun ($F_i y_i$) dan pembelian sepeda ($F_{\text{bike}} z_h$) tidak melebihi anggaran yang tersedia $W$.\\
         \item [b.] Kendala radius pembangunan stasiun:
         \begin{equation}
-        y_i = 0 \text{ if } \exists j \in S, i \ne j : d(i,j) \leq r \text{ and } y_j \ne 0,
+        y_i + y_j \leq 1 \quad \forall i, j \in S, \; i < j, \; d(i, j) \leq r.
         \end{equation}
-        Kendala ini memastikan stasiun yang dibangun dengan jarak minimum $r$ diantara stasiun. Jika tidak ada stasiun dalam radius $r$ atau tidak ada stasiun terdekat yang dibangun ($y_j = 0$), maka stasun $i$ harus dibangun ($y_i = 1$).\\
+        Kendala ini memastikan bahwa jika dua lokasi stasiun potensial $i$ dan $j$ memiliki jarak kurang dari atau sama dengan radius minimum $r$, maka paling banyak hanya satu stasiun yang dapat dibangun di antara keduanya.\\
         \end{enumerate}
     
     
@@ -205,12 +205,12 @@ Dalam subbab ini akan diformulasikan masalah program linear bilangan bulat stoka
     kendala ini memastikan trip hanya bisa ditetapkan ke sepeda jika sepeda tersebut telah dibeli ($z_h = 1$).\\
         \item [c.] Kendala kapasitas stasiun:
     \begin{equation}
-    \sum_{h \in H} \sum_{a \in \delta^+(i_t) \cap (A_W^\omega \cup A_C^\omega)} f_a^{h,\omega} \leq C_i y_i \quad \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus {r^\omega, s^\omega},
+    \sum_{h \in H} \sum_{a \in \delta^+(i_t) \cap (A_W^\omega \cup A_C^\omega)} f_a^{h,\omega} \leq C_i y_i \quad \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus \{r^\omega, s^\omega\},
     \end{equation}
     Kendala ini memastikan jumlah sepeda pada sebuah stasiun (entah dalam waktu tunggu atau sudah terparkir) tidak boleh melebihi kapasitas stasiun $C_i$ jika stasiun dibangun ($y_i = 1$).\\
         \item [d.] Kendala konservasi arus:
     \begin{equation}
-    f^{h,\omega}[\delta^-(i_t)] = f^{h,\omega}[\delta^+(i_t)] \quad \forall h \in H, \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus {r^\omega, s^\omega},
+    f^{h,\omega}[\delta^-(i_t)] = f^{h,\omega}[\delta^+(i_t)] \quad \forall h \in H, \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus \{r^\omega, s^\omega\},
     \end{equation}
     Kendala ini memastikan jumlah sepeda yang memasuki  node (stasiun dalam waktu tertentu) harus sama dengan jumlah stasiun yang meninggalkan node tersebut, untuk mempertahankan konservasi aliran.\\
         \item [e.] Kendala alokasi awal:
@@ -234,13 +234,13 @@ Dalam subbab ini akan diformulasikan masalah program linear bilangan bulat stoka
     
     \item Domain variabel
     \begin{align}
-    y_i &\in (0,1) \quad \forall i \in S, \\
-    z_h &\in (0,1) \quad \forall h \in H, \\
-    x_k^\omega &\in (0,1) \quad \forall k \in K^\omega, \forall \omega \in \Omega, \\
-    x_k^{h,\omega} &\in (0,1) \quad \forall h \in H, \forall \omega \in \Omega, \forall k \in K^\omega, \\
-    f_a^{h,\omega} &\in (0,1) \quad \forall h \in H, \forall \omega \in \Omega, \forall a \in A^\omega.
+    y_i &\in \{0, 1\} \quad \forall i \in S, \\
+    z_h &\in \{0, 1\} \quad \forall h \in H, \\
+    x_k^\omega &\in \{0, 1\} \quad \forall k \in K^\omega, \forall \omega \in \Omega, \\
+    x_k^{h,\omega} &\in \{0, 1\} \quad \forall h \in H, \forall \omega \in \Omega, \forall k \in K^\omega, \\
+    f_a^{h,\omega} &\in \{0, 1\} \quad \forall h \in H, \forall \omega \in \Omega, \forall a \in A^\omega.
     \end{align}
-    Kendala-kendala ini mendefinisikan semua variabel keputusan dalam bentuk biner (0 atau 1), yang menunjukkan bahwa stasiun dibangun atau tidak, sepeda dibeli atau tidak, trip diterima atau tidak, trip ditetapkan pada sepeda tertentu atau tidak, dan kendala operasional seperti waktu pengisian daya dan kapasitas stasiun.
+    Kendala-kendala ini mendefinisikan semua variabel keputusan dalam bentuk biner ($\{0, 1\}$), yang menunjukkan bahwa stasiun dibangun atau tidak, sepeda dibeli atau tidak, trip diterima atau tidak, trip ditetapkan pada sepeda tertentu atau tidak, dan kendala operasional seperti waktu pengisian daya dan kapasitas stasiun.
     \end{enumerate}
 
 
@@ -248,20 +248,20 @@ Dalam subbab ini akan diformulasikan masalah program linear bilangan bulat stoka
 
 Berdasarkan konstruksi di atas, permasalahan SCSLP dapat dituliskan sebagai berikut:
 \begin{align}
-    \max \sum_{\omega \in \Omega} \pi_{\omega} \left( \sum_{k \in K_{\omega}} p_k x_k^\omega \right) - \sum_{i \in S} \varphi_i y_i - \sum_{h \in H} \phi z_h.
+    \max \sum_{\omega \in \Omega} \pi_{\omega} \left( \sum_{k \in K_{\omega}} p_k x_k^\omega \right) - \sum_{i \in S} F_i y_i - \sum_{h \in H} F_{\text{bike}} z_h.
 \end{align}
 dengan kendala:
 \textbf{First-stage}
 \begin{align}
     \sum_{i \in S} F_i y_i + \sum_{h \in H} F_{\text{bike}} z_h \leq W,\\
-    y_i = 0 \text{ if } \exists j \in S, i \ne j : d(i,j) \leq r \text{ and } y_j \ne 0.
+    y_i + y_j \leq 1 \quad \forall i, j \in S, \; i < j, \; d(i, j) \leq r.
 \end{align}
 \textbf{Second-stage}:
 \begin{align}
     &\sum_{h \in H} x_k^{h,\omega} = x_k^\omega \quad \forall \omega \in \Omega, k \in K_\omega,\\
     &x_k^{h,\omega} \leq z_h \quad \forall h \in H, \forall \omega \in \Omega, \forall k \in K_\omega,\\
-    &\sum_{h \in H} \sum_{a \in \delta^+(i_t) \cap (A_W^\omega \cup A_C^\omega)} f_a^{h,\omega} \leq C_i y_i \quad \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus {r^\omega, s^\omega},\\
-    &f^{h,\omega}[\delta^-(i_t)] = f^{h,\omega}[\delta^+(i_t)] \quad \forall h \in H, \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus {r^\omega, s^\omega},\\
+    &\sum_{h \in H} \sum_{a \in \delta^+(i_t) \cap (A_W^\omega \cup A_C^\omega)} f_a^{h,\omega} \leq C_i y_i \quad \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus \{r^\omega, s^\omega\},\\
+    &f^{h,\omega}[\delta^-(i_t)] = f^{h,\omega}[\delta^+(i_t)] \quad \forall h \in H, \forall \omega \in \Omega, \forall i_t \in V^\omega \setminus \{r^\omega, s^\omega\},\\
     &f^{h,\omega}[A_I^\omega] = z_h \quad \forall h \in H, \forall \omega \in \Omega,\\
     \begin{split}
         f_a^{h,\omega} \leq f_{a'}^{h,\omega} \quad \forall h \in H, \forall \omega \in \Omega, \forall k \in K^\omega, \forall a = (i_{s_k}, j_{e_k}) \in A_T^\omega(k), \\
@@ -270,11 +270,11 @@ dengan kendala:
 \end{align}
 \textbf{Domain Variabel}:
 \begin{align}
-y_i &\in (0,1) \quad \forall i \in S, \\
-z_h &\in (0,1) \quad \forall h \in H, \\
-x_k^\omega &\in (0,1) \quad \forall k \in K^\omega, \forall \omega \in \Omega, \\
-x_k^{h,\omega} &\in (0,1) \quad \forall h \in H, \forall \omega \in \Omega, \forall k \in K^\omega, \\
-f_a^{h,\omega} &\in (0,1) \quad \forall h \in H, \forall \omega \in \Omega, \forall a \in A^\omega.
+y_i &\in \{0, 1\} \quad \forall i \in S, \\
+z_h &\in \{0, 1\} \quad \forall h \in H, \\
+x_k^\omega &\in \{0, 1\} \quad \forall k \in K^\omega, \forall \omega \in \Omega, \\
+x_k^{h,\omega} &\in \{0, 1\} \quad \forall h \in H, \forall \omega \in \Omega, \forall k \in K^\omega, \\
+f_a^{h,\omega} &\in \{0, 1\} \quad \forall h \in H, \forall \omega \in \Omega, \forall a \in A^\omega.
 \end{align}
 
 \section{Simulasi}

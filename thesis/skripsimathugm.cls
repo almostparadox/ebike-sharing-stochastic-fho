@@ -32,17 +32,14 @@
 \RequirePackage{algorithm}
 \RequirePackage{natbib}
 \bibliographystyle{plainnat}
-\usepackage{float}
 \renewcommand{\baselinestretch}{1.5}
 \parskip0.15cm
 \tolerance=1
 \emergencystretch=\maxdimen
 \hyphenpenalty=10000
 \hbadness=10000
-\usepackage{natbib}
 \newcommand{\mycitet}[1]{\citeauthor{#1}, \citeyear{#1}}
 \newcommand{\mycite}[1]{\citeauthor{#1} (\citeyear{#1})}
-\usepackage{caption}
 \newcommand{\source}[1]{\caption*{Source: #1}}
 
 \renewcommand{\normalsize}{\fontsize{12bp}{14bp}\selectfont}
@@ -149,7 +146,7 @@
 \def\tpustaka#1{\citeauthor{#1} (\citeyear{#1})}
 \def\itemset{\vspace{-1ex}\itemsep3pt \parskip0pt \parsep0pt}
 
-\usepackage[pdftex,bookmarks=true]{hyperref}
+\RequirePackage[bookmarks=true,plainpages=false,pdfpagelabels]{hyperref}
 
 
 \def\captionsbahasa{%

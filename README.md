@@ -56,13 +56,13 @@ Fire Hawk Optimizer (Azizi et al., 2023) models the foraging and territory-sprea
 
 ## 📊 Results Summary
 
-| Metric                           | Historical Defense Result (2024)   | Simulation Reproduction         |
-| :------------------------------- | :--------------------------------- | :------------------------------ |
-| **Objective Value (Net Profit)** | **IDR 274,030,876.00**             | **IDR 100,054,385.00+**         |
-| **Stations Built**               | 12 of 15 candidate stations       | 14 of 15 candidate stations     |
-| **Bikes Allocated**              | 55 electric bikes                  | 21–55 electric bikes            |
-| **Trips Served**                 | 80 of 90 requests                  | 76 of 90 requests               |
-| **Primary Hubs**                 | Tugu, Malioboro, Seturan, Bandara  | Tugu, Malioboro, Kentungan, UGM |
+| Metric                           | Historical Defense Result (2024)   | Simulation Reproduction (Discrete FHO) |
+| :------------------------------- | :--------------------------------- | :------------------------------------- |
+| **Objective Value (Net Profit)** | **IDR 274,030,876.00**             | **IDR 211,054,385.00**                 |
+| **Stations Built**               | 12 of 15 candidate stations       | 14 of 15 candidate stations            |
+| **Bikes Allocated**              | 55 electric bikes                  | 5–55 electric bikes                    |
+| **Trips Served**                 | 80 of 90 requests                  | 83 of 90 requests                      |
+| **Primary Hubs**                 | Tugu, Malioboro, Seturan, Bandara  | Tugu, Malioboro, Kentungan, Seturan    |
 
 Interactive visualization of candidate stations and trip trajectories is automatically rendered to `results/solution_map.html`.
 
