@@ -299,12 +299,12 @@ Untuk mensimulasikan sistem \textit{electric bike-sharing} di Yogyakarta, diguna
     \item \textbf{Profit}\\ Profit per trip dihitung berdasarkan durasi perjalanan, dengan rate 10.000.000 per unit waktu.
     \item \textbf{Konsumsi Baterai}\\ Konsumsi baterai untuk setiap trip dihitung berdasarkan jarak perjalanan relatif terhadap jarak maksimum baterai (50 km).
 \end{enumerate}
-Data ini digunakan untuk membuat peta interaktif yang menunjukkan lokasi potensial stasiun dan trip yang mungkin terjadi. Peta ini disimpan sebagai file HTML untuk visualisasi lebih lanjut.
+Data spasial ini direpresentasikan pada jaringan jalan riil Kota Yogyakarta menggunakan \textit{OpenStreetMap} dan \textit{Open Source Routing Machine} (OSRM) untuk profil rute sepeda. Lintasan perjalanan antar-titik tidak dimodelkan sebagai garis lurus \textit{Euclidean} sederhana, melainkan mengikuti koridor jalan dan persimpangan aktual (seperti Jl. Malioboro, Jl. Mangkubumi, Jl. Kaliurang, dan koridor arteri lainnya) guna merefleksikan jarak tempuh serta konsumsi baterai yang realistis, sebagaimana diilustrasikan pada Gambar \ref{Peta lokasi potensial pembangunan stasiun}. Peta interaktif ini juga disimpan sebagai file HTML untuk visualisasi navigasi spasial lebih lanjut.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.8]{Inisial.png}
-    \caption{Peta Lokasi Potensial Pembangunan Stasiun}
+    \includegraphics[width=0.95\textwidth]{Inisial.png}
+    \caption{Peta Lokasi Potensial Pembangunan Stasiun dan Rute Perjalanan pada Jaringan Jalan Yogyakarta}
     \label{Peta lokasi potensial pembangunan stasiun}
 \end{figure}
 
@@ -460,8 +460,8 @@ dengan
 Simulasi \textit{Fire Hawk Optimizer} terhadap formulasi yang telah dipaparkan di atas dengan hasil sebagai berikut. 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.45]{__results___0_1.png}
-    \caption{Iterasi Algoritma \textit{Fire Hawk Optimizer}}
+    \includegraphics[width=0.9\textwidth]{__results___0_1.png}
+    \caption{Iterasi Konvergensi Algoritma \textit{Fire Hawk Optimizer}}
     \label{Iterasi Algoritma Fire Hawk Optimizer}
 \end{figure}
 Algoritma \textit{Fire Hawk Optimizer} melakukan proses iterasi untuk terus memperbaiki solusi seperti yang terlihat pada Gambar \ref{Iterasi Algoritma Fire Hawk Optimizer}. Pada setiap iterasi:
@@ -481,12 +481,12 @@ Setelah kriteria penghentian terpenuhi, algoritma akan berhenti dan mengembalika
 
 \subsection{Output Simulasi}
 
-Simulasi dilakukan dengan menggunakan \textit{Python}  dan diperoleh solusi optimal dengan menggunakan algoritma \textit{Fire Hawk Optimizer}. Gambar \ref{Peta stasiun yang dibangun dan trip yang diterima} menunjukkan lokasi stasiun yang dibuka dan trip yang diterima, dijelaskan juga hasil dari output, termasuk nilai untuk setiap variabel dan hasil fungsi objektif.
+Simulasi dilakukan dengan menggunakan bahasa pemrograman \textit{Python} dan diperoleh solusi optimal dengan menggunakan algoritma \textit{Fire Hawk Optimizer}. Gambar \ref{Peta stasiun yang dibangun dan trip yang diterima} memvisualisasikan konfigurasi stasiun terpilih beserta rute perjalanan aktual pada jaringan jalan Yogyakarta yang berhasil dilayani. Penjelasan rinci mengenai hasil variabel keputusan dan nilai fungsi objektif dipaparkan sebagai berikut.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[scale=0.8]{hasil.png}
-    \caption{Peta Stasiun yang Dibangun dan Trip yang Diterima}
+    \includegraphics[width=0.95\textwidth]{hasil.png}
+    \caption{Peta Konfigurasi Stasiun Terbangun dan Rute Perjalanan yang Dilayani pada Jaringan Jalan Yogyakarta}
     \label{Peta stasiun yang dibangun dan trip yang diterima}
 \end{figure}
 
