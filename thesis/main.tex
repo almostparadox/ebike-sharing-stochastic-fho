@@ -1,4 +1,5 @@
 \documentclass{skripsimathugm}
+\graphicspath{{figures/}{figures/Gambar FHO/}{attachments/}}
 
 %-----------------------------------------------------------------
 %Disini awal masukan untuk data Skripsi (ISI SESUAI DENGAN DATA ANDA!)
@@ -185,11 +186,11 @@ The growth of tourism in Yogyakarta demands an efficient, environmentally friend
 %Disini awal masukan untuk Bab (ISI BAB I DAPAT DIEDIT DI FILE Bab1.tex,
 %ISI BAB II DAPAT DIEDIT DI FILE Bab2.tex, dst...)
 %-----------------------------------------------------------------
-\input{Bab1.tex}
-\input{Bab2.tex}
-\input{Bab3.tex}
-\input{Bab4.tex}
-\input{Bab5}
+\input{chapters/bab1_pendahuluan.tex}
+\input{chapters/bab2_landasan_teori.tex}
+\input{chapters/bab3_optimisasi_stokastik.tex}
+\input{chapters/bab4_pemodelan_simulasi.tex}
+\input{chapters/bab5_penutup.tex}
 
 %-----------------------------------------------------------------
 %Disini akhir masukan Bab
@@ -686,27 +687,27 @@ END
     \label{LINGO}
 \end{figure}
 
-\chapter{LAMPIRAN PENYELESAIAN SISTEM \textit{ELECTRIC BIKE-SHARING} SEDERHANA DENGAN \textit{FIRE HAWK OPTIMIZER}}
-\lstset{language=python, frame=single}
-\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
-\lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
-\lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
-\lstinputlisting{skripsi_generating_data.py}
-
-
 \chapter{LAMPIRAN SKRIP PROGRAM GENERATING DATA}
 \lstset{language=python, frame=single}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
 \lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
 \lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
-\lstinputlisting{skripsi_example.py}
+\lstinputlisting{../code/src/scslp/generator.py}
+
+
+\chapter{LAMPIRAN SKRIP PROGRAM PEMODELAN DAN KENDALA (SCSLP)}
+\lstset{language=python, frame=single}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
+\lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
+\lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
+\lstinputlisting{../code/src/scslp/problem.py}
 
 \chapter{LAMPIRAN SKRIP PENYELESAIAN ALGORITMA FIRE HAWK OPTIMIZER}
 \lstset{language=python, frame=single}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt, basicstyle=\footnotesize}
 \lstset{xleftmargin=6pt, xrightmargin=8pt, rulesepcolor=\color{black}}
 \lstset{keywordstyle=\color{blue},breaklines=true, breakindent=27pt}
-\lstinputlisting{fork_of_skripsi_v2.py}
+\lstinputlisting{../code/src/scslp/fho.py}
 
 %-----------------------------------------------------------------
 %-----------------------------------------------------------------
