@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from pathlib import Path
 import random
+from pathlib import Path
 
 from geopy.distance import geodesic
 import numpy as np
@@ -81,12 +81,12 @@ def generate_synthetic_data(
             while True:
                 orig_st, dest_st = rng.sample(range(n_st), 2)
                 orig_coord = (
-                    stations_df.loc[orig_st, "latitude"] + rng.uniform(-0.005, 0.005),
-                    stations_df.loc[orig_st, "longitude"] + rng.uniform(-0.005, 0.005),
+                    float(stations_df.loc[orig_st, "latitude"] + rng.uniform(-0.005, 0.005)),
+                    float(stations_df.loc[orig_st, "longitude"] + rng.uniform(-0.005, 0.005)),
                 )
                 dest_coord = (
-                    stations_df.loc[dest_st, "latitude"] + rng.uniform(-0.005, 0.005),
-                    stations_df.loc[dest_st, "longitude"] + rng.uniform(-0.005, 0.005),
+                    float(stations_df.loc[dest_st, "latitude"] + rng.uniform(-0.005, 0.005)),
+                    float(stations_df.loc[dest_st, "longitude"] + rng.uniform(-0.005, 0.005)),
                 )
                 trip_dist = geodesic(orig_coord, dest_coord).kilometers
 
